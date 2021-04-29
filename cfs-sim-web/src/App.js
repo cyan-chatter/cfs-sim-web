@@ -33,11 +33,10 @@ const App = () => {
   const copyValuesToRoot = (ph,pd) => {
     setInputData({
       number : ph.i1,
-      size : ph.i2,
+      tq : ph.i2,
       pd 
     })
     setDisabledSimulate(false)
-    console.log('root received values') ///////
   }
 
     
@@ -50,7 +49,7 @@ const App = () => {
   
   return (
     <div className="App">   
-    <h1 className="App-header">VISUALIZE</h1>
+    <h1 className="App-header">VISUALIZE CFS</h1>
     <br/>
     <Input className="Input" copyValuesToRoot = {copyValuesToRoot}/>
     <button className="TempButton" id="Simulate" onClick={onClickToFetchHandler} disabled = {DisabledSimulate}> Simulate </button>

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 export const useData = (urlData, postData) => {
     const [Data,setData] = useState(null)
     console.log('use data runs')
+    //need to perform a POST request here with postData
     useEffect(()=>{
       console.log('use data -> useEffect runs')
       const fetchData = async (url) => {
@@ -14,8 +15,7 @@ export const useData = (urlData, postData) => {
         }
       }
       if(urlData) fetchData(urlData)
-    },[urlData, postData])
-  
+    },[urlData, postData])  
     return Data;
 }
 
