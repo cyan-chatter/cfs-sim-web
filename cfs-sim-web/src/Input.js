@@ -1,5 +1,5 @@
 import './App.css'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import InputForm from './InputForm'
 
 const Input = ({copyValuesToRoot}) => {
@@ -56,7 +56,8 @@ const Input = ({copyValuesToRoot}) => {
         setInputValues([...InputValues,CurInputs])
         setCurInputs({I1 : null, I2: null, I3: null})
         setIInput(IInput-1)
-        if(IInput === 0){
+        if(IInput === 0){ ////problem here
+            console.log('IInput got to 0')
             setDisabledNInput(false)
             setDataSenderMutex(true)
         }
@@ -79,17 +80,20 @@ const Input = ({copyValuesToRoot}) => {
     }
 
     return (
-        <div>
-        <input type="number" className="InputNumber1" ref={inputNumber1}  disabled = {DisabledNInput? "disabled" : ""}></input>
-        <input type="number" className="InputNumber2" ref={inputNumber2}  disabled = {DisabledNInput? "disabled" : ""}></input>
-        <button className="TempButton" onClick={onFixNumber} disabled = {DisabledNInput? "disabled" : ""}></button>
+        <>
+        <h4>Enter Input Number 1</h4>
+        <input type="number" className="InputNumber1" ref={inputNumber1}  disabled = {DisabledNInput}></input>
+        <h4>Enter Input Number 2</h4>
+        <input type="number" className="InputNumber2" ref={inputNumber2}  disabled = {DisabledNInput}></input>
+        <br/>
+        <button className="TempButton" onClick={onFixNumber} disabled = {DisabledNInput}>Enter Input Numbers</button>
         <div className="InputValues"> 
             <h3>Input Values:</h3> 
             <div>{NInput ? (<><p>Input Number 1 : {NInput.i1}</p><p>Input Number 2 : {NInput.i2}</p></>) : null }</div> 
             <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>I1</th> <th>I2</th> <th>I3</th> </tr> {displayInputValues()}</table>) : (<p>NONE</p>)}</div> 
         </div>
         <div className="InputForm"> {IInput > 0 ? createInputForm() : null} </div>
-        </div>
+        </>
     )
 }
 

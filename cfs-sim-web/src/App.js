@@ -37,6 +37,7 @@ const App = () => {
       pd 
     })
     setDisabledSimulate(false)
+    console.log('root received values') ///////
   }
 
     
@@ -51,8 +52,8 @@ const App = () => {
     <div className="App">   
     <h1 className="App-header">VISUALIZE</h1>
     <br/>
-    <Input getValues = {copyValuesToRoot}/>
-    <button className="TempButton" onClick={onClickToFetchHandler} disabled = {DisabledSimulate? "disabled" : ""}> Simulate </button>
+    <Input className="Input" getValues = {copyValuesToRoot}/>
+    <button className="TempButton" id="Simulate" onClick={onClickToFetchHandler} disabled = {DisabledSimulate}> Simulate </button>
     {tree}
     </div>
   )
