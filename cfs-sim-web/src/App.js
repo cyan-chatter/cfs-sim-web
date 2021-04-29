@@ -52,7 +52,7 @@ const App = () => {
     <div className="App">   
     <h1 className="App-header">VISUALIZE</h1>
     <br/>
-    <Input className="Input" getValues = {copyValuesToRoot}/>
+    <Input className="Input" copyValuesToRoot = {copyValuesToRoot}/>
     <button className="TempButton" id="Simulate" onClick={onClickToFetchHandler} disabled = {DisabledSimulate}> Simulate </button>
     {tree}
     </div>

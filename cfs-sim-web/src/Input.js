@@ -10,8 +10,6 @@ const Input = ({copyValuesToRoot}) => {
     const [DisabledNInput, setDisabledNInput] = useState(false)
     const [DisabledSubmit, setDisabledSubmit] = useState(true)
 
-    const [DataSenderMutex, setDataSenderMutex] = useState(false)
-
     const [CurInputs,setCurInputs] = useState({I1 : null, I2: null, I3: null}) 
     const [InputValues, setInputValues] = useState([])
 
@@ -19,11 +17,14 @@ const Input = ({copyValuesToRoot}) => {
     const inputNumber2 = useRef(0)
 
     useEffect(() => {
-        if(DataSenderMutex) copyValuesToRoot(NInput,InputValues)
-        return () => {
-            if(DataSenderMutex) setDataSenderMutex(false)
+        
+        if(IInput === 0){ 
+            console.log('IInput got to 0')
+            copyValuesToRoot(NInput,InputValues)
+            //setDisabledNInput(false)
         }
-    }, [DataSenderMutex])
+        
+    }, [IInput])
 
     const onFixNumber = () => {
         setNInput({i1 : inputNumber1.current.value, i2 : inputNumber2.current.value})
@@ -56,11 +57,6 @@ const Input = ({copyValuesToRoot}) => {
         setInputValues([...InputValues,CurInputs])
         setCurInputs({I1 : null, I2: null, I3: null})
         setIInput(IInput-1)
-        if(IInput === 0){ ////problem here
-            console.log('IInput got to 0')
-            setDisabledNInput(false)
-            setDataSenderMutex(true)
-        }
     }
 
     const createInputForm = () => {
@@ -78,6 +74,8 @@ const Input = ({copyValuesToRoot}) => {
             )
         })
     }
+
+    
 
     return (
         <>
