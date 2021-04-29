@@ -1,4 +1,4 @@
-import './App.css'
+import '../design/App.css'
 import React, {useState, useEffect} from 'react'
 import TreeComponent from './TreeComponent'
 import Input from './Input'

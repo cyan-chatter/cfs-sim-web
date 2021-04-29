@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react'
-import './App.css'
+import '../design/App.css'
 //import useResizeObserver from './useResizeObserver'
 
 const d3 = require('d3')
