@@ -16,31 +16,44 @@ const dimensions = {
 
 const App = () => {
 
+  const [URL,setURL] = useState(null)
+  const [InputData, setInputData] = useState(null) 
+  const [DisabledSimulate, setDisabledSimulate] = useState(true)
+  
+  const Data = useData(URL,InputData)
+
   const onClickToFetchHandler = () => {
     console.log('clicked to fetch')
-
-    setURL(urlJSON)
+    if(!DisabledSimulate){
+      setURL(urlJSON)
+      setDisabledSimulate(true)
+    } 
   }
 
-  const [URL,setURL] = useState(null)
-  const [input,setInput] = useState(null)
+  const copyValuesToRoot = (ph,pd) => {
+    setInputData({
+      number : ph.i1,
+      size : ph.i2,
+      pd 
+    })
+    setDisabledSimulate(false)
+  }
 
-  const Data = useData(URL)
     
   console.log('app runs Data is ', Data)
-  if(!Data) return (
-    <div>
-    <button className="TempButton" onClick={onClickToFetchHandler}> Fetch Data </button>
-    </div>
-  )
+  
+  var tree = null
+  if(Data){
+    tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
+  }
   
   return (
     <div className="App">   
     <h1 className="App-header">VISUALIZE</h1>
     <br/>
-    <Input />
-    <button className="TempButton" onClick={onClickToFetchHandler}> Fetch Data </button>
-    <TreeComponent dimensions= {dimensions} data={Data}/>
+    <Input getValues = {copyValuesToRoot}/>
+    <button className="TempButton" onClick={onClickToFetchHandler} disabled = {DisabledSimulate? "disabled" : ""}> Simulate </button>
+    {tree}
     </div>
   )
 }

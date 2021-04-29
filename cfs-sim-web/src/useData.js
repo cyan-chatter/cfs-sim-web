@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-export const useData = (urlData) => {
+export const useData = (urlData, postData) => {
     const [Data,setData] = useState(null)
     console.log('use data runs')
     useEffect(()=>{
@@ -14,7 +14,7 @@ export const useData = (urlData) => {
         }
       }
       if(urlData) fetchData(urlData)
-    },[urlData])
+    },[urlData, postData])
   
     return Data;
 }
