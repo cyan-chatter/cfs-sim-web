@@ -1,5 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react'
 import '../design/App.css'
+import '../design/Tree.css'
 //import useResizeObserver from './useResizeObserver'
 
 const d3 = require('d3')
@@ -104,9 +105,9 @@ const TreeComponent = ({dimensions,data}) => {
   }, [dimensions,data])
 
   return (
-    <div className="tree">
+    <>
         <svg className="svg" ref= {svgRef}></svg>
-    </div>    
+    </>    
   )
 
 }

@@ -1,6 +1,7 @@
 import '../design/App.css'
 import React, {useState, useEffect, useRef} from 'react'
 import InputForm from './InputForm'
+import '../design/Input.css'
 
 const Input = ({copyValuesToRoot}) => {
     
@@ -75,22 +76,27 @@ const Input = ({copyValuesToRoot}) => {
         })
     }
 
-    
-
     return (
         <>
-        <h4>Enter Input Number 1</h4>
-        <input type="number" className="InputNumber1" ref={inputNumber1}  disabled = {DisabledNInput}></input>
-        <h4>Enter Input Number 2</h4>
-        <input type="number" className="InputNumber2" ref={inputNumber2}  disabled = {DisabledNInput}></input>
-        <br/>
-        <button className="TempButton" onClick={onFixNumber} disabled = {DisabledNInput}>Enter Input Numbers</button>
+        <div className="InputMain">
+        <div className = "InputStart">
+        <p className="labelInputBinder">
+        <label>Enter Input Number 1</label>
+        <input type="number" className="InputNumber" ref={inputNumber1}  disabled = {DisabledNInput}></input>
+        </p>
+        <p className="labelInputBinder">
+        <label>Enter Input Number 2</label>
+        <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
+        </p>
+        <button className="TempButton" id="Enter" onClick={onFixNumber} disabled = {DisabledNInput}> Enter </button>
+        </div>    
+        <div className="InputForm"> {IInput > 0 ? createInputForm() : null} </div>
+        </div>
         <div className="InputValues"> 
-            <h3>Input Values:</h3> 
-            <div>{NInput ? (<><p>Input Number 1 : {NInput.i1}</p><p>Input Number 2 : {NInput.i2}</p></>) : null }</div> 
+            <h3>Values:</h3>
+            <div>{NInput ? (<><p><b className="highlight">Input Number 1</b> = <b className="highlight">{NInput.i1}</b></p><p><b className="highlight">Input Number 2</b> = <b className="highlight">{NInput.i2}</b></p></>) : null }</div> 
             <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>I1</th> <th>I2</th> <th>I3</th> </tr> {displayInputValues()}</table>) : (<p>NONE</p>)}</div> 
         </div>
-        <div className="InputForm"> {IInput > 0 ? createInputForm() : null} </div>
         </>
     )
 }

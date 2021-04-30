@@ -39,7 +39,6 @@ const App = () => {
     setDisabledSimulate(false)
   }
 
-    
   console.log('app runs Data is ', Data)
   
   var tree = null
@@ -51,9 +50,9 @@ const App = () => {
     <div className="App">   
     <h1 className="App-header">VISUALIZE CFS</h1>
     <br/>
-    <Input className="Input" copyValuesToRoot = {copyValuesToRoot}/>
+    <div className="Input"><Input copyValuesToRoot = {copyValuesToRoot}/></div>
     <button className="TempButton" id="Simulate" onClick={onClickToFetchHandler} disabled = {DisabledSimulate}> Simulate </button>
-    {tree}
+    <div className="Tree">{tree}</div>
     </div>
   )
 }

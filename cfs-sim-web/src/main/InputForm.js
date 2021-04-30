@@ -1,15 +1,27 @@
 import '../design/App.css'
+import '../design/InputForm.css'
 import React, {useState, useEffect} from 'react'
 
 const InputForm = (props) => {
     
     return (
-        <form key={"F" + props.keyIndex}>
+        <React.Fragment key={"F" + props.keyIndex}>
+            <p className="labelInputBinder">
+            <label> Enter Process ID </label>
             <input name="I1" type="text" onChange={props.onInputChange}></input>
+            </p>
+            <p className="labelInputBinder">
+            <label> Enter Arrival Time </label>
             <input name="I2" type="number" onChange={props.onInputChange}></input>
+            </p>    
+            <p className="labelInputBinder">
+            <label> Enter Burst Time </label>
             <input name="I3" type="number" onChange={props.onInputChange}></input>
-            <button className="TempButton" onClick={props.onSubmit}>Submit</button>
-        </form>        
+            </p>
+            <p className="labelInputBinder">
+            <button className="TempButton" id="Submit" onClick={props.onSubmit}>Submit</button>
+            </p>
+        </React.Fragment>        
     )
     
 }
