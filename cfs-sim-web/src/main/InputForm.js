@@ -1,5 +1,5 @@
 import '../design/App.css'
-import '../design/InputForm.css'
+import '../design/Input.css'
 import React, {useState, useEffect} from 'react'
 
 const InputForm = (props) => {

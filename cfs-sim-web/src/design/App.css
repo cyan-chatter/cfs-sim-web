@@ -39,7 +39,7 @@
   grid-column-end: col-start 3; 
  }
  
- .tree{
+ .Tree{
    grid-row-start: row-start 5;
    grid-row-end: row-start 6;
    grid-column-start: col-start 2;
@@ -91,12 +91,15 @@
   font-family:'Lucida Sans'; 
   display: flex;
   flex-direction: column;
-  background-color: burlywood;
   min-height: 100vh;  
   justify-content: space-around;
   align-items: center;
+  background:honeydew;
  }
 
+ input{
+  background:honeydew;
+ }
  .App-header{
    min-height: 50px;
    border: 1px solid black;
@@ -112,34 +115,23 @@
 
  .Input{
   min-height: 100px;
-  background-color:rgb(82, 163, 82);
+  background-color:lightgreen;
+  min-width: 80vw;
  }
 
  #Simulate{
-   min-height: 30px;
+   min-height: 50px;
    border: 2px solid black;
    background-color:darkturquoise;
-   min-width: 100px;
+   min-width: 150px;
+   font-size: 1.5em;
  }
 
- .InputMain{
-    min-height: 80px;
-    background-color:silver;
-  }
-
- .InputValues{
-    border: 1px solid black;
-    min-height: 1px;
-    background-color:lightgreen;
-  }
  
- .InputForm{
-    min-height: 1px;
-    background-color:lightskyblue;
- }
-
  .Tree{
     border: 3px solid black;
-    min-height: 240px;
-    background-color:mediumspringgreen;
+    min-height: 100vh;
+    min-width: 80vw;
+    height : 100vh;
+    width : 80vw;
  }

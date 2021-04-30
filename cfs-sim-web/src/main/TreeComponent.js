@@ -10,13 +10,6 @@ const TreeComponent = ({dimensions,data}) => {
   
   const svgRef = useRef()
 
-  // function t (){
-  //   width = document.body.clientWidth * 0.7
-  //   height = document.body.clientHeight * 0.7
-  // }
-  
-  // window.onresize = t
-
   useEffect(() => {
   
     if(!dimensions) return 
