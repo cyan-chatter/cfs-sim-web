@@ -4,13 +4,16 @@ app.use(express.json())
 const port = 5500
 const scheduler = require('../scheduler')
 
-var resultData = null
+var resultData = []
 
 const getResults = (timeTaken, results) => {
-    resultData = {
-        ...resultData, results, timeTaken
+    const curResult = {
+        results, timeTaken
     }
+    
+    resultData.push(curResult)
 }
+
 
 //write your code here
 const schedulerMain = (inputData) => {
@@ -40,10 +43,16 @@ const inputData = {
 console.log(inputData) 
 schedulerMain(inputData)
 
-const response = resultData
+const response = {resultData : resultData}
 
-console.log(response.results.time_data)
-console.log(response.results.node_stats)
+for(r of resultData){
+    console.log('results time data: ', r.results.time_data)
+    console.log('results node stats: ', r.results.node_stats)
+}
+
+
+// console.log(response.results.time_data)
+// console.log(response.results.node_stats)
 
 
 // app.post('/', function (req, res) {
