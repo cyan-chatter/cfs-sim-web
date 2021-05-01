@@ -10,7 +10,9 @@ if (typeof module !== 'undefined') {
 
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline, callback) {
-    // queue of tasks sorted in start_time order
+    // queue of tasks sorted in arrival_time order
+
+    
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
     var time_queue_idx = 0;
@@ -28,6 +30,8 @@ function runScheduler(tasks, timeline, callback) {
     var start_ms = new Date().getTime();
     binaryTree.RESET_STATS();
 
+    var tasksCompleted = 0
+
     // Loop from time/tick 0 through the total time/ticks specified
     for (var curTime = 0; curTime < tasks.total_time; curTime++) {
         // Periodic debug output
@@ -42,15 +46,15 @@ function runScheduler(tasks, timeline, callback) {
         };
 
         // Check tasks at the beginning of the task queue. Add any to
-        // the timeline structure when the start_time for those tasks
+        // the timeline structure when the arrival_time for those tasks
         // has arrived.
-        while (time_queue_idx < time_queue.length && curTime >= time_queue[time_queue_idx].start_time) {
+        while (time_queue_idx < time_queue.length && curTime >= time_queue[time_queue_idx].arrival_time) {
             var new_task = time_queue[time_queue_idx++];
             // new tasks get their vruntime set to the current
             // min_vruntime
             new_task.vruntime = min_vruntime;
             new_task.truntime = 0;
-            new_task.actual_start_time = curTime;
+            new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
         }
 
@@ -79,19 +83,20 @@ function runScheduler(tasks, timeline, callback) {
 
         // Update the running_task (if any) by increasing the vruntime
         // and the truntime. If the running task has run for it's full
-        // duration then report it as completed and set running_task
+        // burst_time then report it as completed and set running_task
         // to null.
         var task_done = false;
         if (running_task) {
-            running_task.vruntime += Math.max(1, time_queue.size / running_task.priority);
+            running_task.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / running_task.priority);
             running_task.truntime++;
             tresults.running_task = running_task;
-            //console.log(curTime + ": " + running_task.id);
-            if (running_task.truntime >= running_task.duration) {
-                running_task.completed_time = curTime;
+            console.log(curTime + ": " + running_task.id);
+            if (running_task.truntime >= running_task.burst_time) {
+                ++tasksCompleted
+                running_task.completed_time = curTime
                 tresults.completed_task = running_task
                 task_done = true; // Set running_task to null later
-                //console.log("Completed task:", running_task.id);
+                console.log("Completed task:", running_task.id);
             }
         }
 
@@ -163,7 +168,7 @@ function generateReport(tasks, timeline, results, mode) {
         out += "Task Queue:\n";
         for (var i = 0; i < tasks.task_queue.length; i++) {
             var t = tasks.task_queue[i];
-            out += t.id + " " + t.start_time + " " + t.duration + "\n";
+            out += t.id + " " + t.arrival_time + " " + t.burst_time + "\n";
             //console.log(tasks.task_queue);
         }
     }
@@ -221,7 +226,7 @@ function generateReport(tasks, timeline, results, mode) {
         out += "                total  : " + total + "\n";
         out += "Throughput: " + (completed / results.elapsed_ms) + " completed tasks/ms\n";
         out += "            " + (completed / total) + " completed tasks/operation\n";
-        //console.log("Tasks per tick:", tasks_per_tick);
+        console.log("Tasks per tick:", tasks_per_tick);
     }
 
     return out;
@@ -235,47 +240,6 @@ function getTimeline() {
     return rbt.RBT(vsort);
 }
 
-function usage() {
-    console.log("node scheduler.js [--summary|--csv|--report|--detailed] bst|rbt|heaptree|heaparray TASK_FILE");
-    process.exit(2);
-}
-
-if (typeof require !== 'undefined' && require.main === module) {
-    // we are being run directly so load the task file specified on
-    // the command line pass the data to runScheduler using an
-    // RedBlackTree for the timeline
-    if (process.argv.length < 4) {
-        usage();
-    }
-
-    var fs = require('fs');
-    var tasksModule = require('./tasks');
-    var mode = "summary";
-
-    if (process.argv[2].slice(0, 2) === "--") {
-        mode = process.argv[2].slice(2);
-        process.argv.splice(2, 1);
-    }
-
-    var timeline = getTimeline();
-    var fileName = process.argv[3];
-    var data = fs.readFileSync(fileName, 'utf8');
-    var tasks = tasksModule.parseTasks(data);
-
-    // Run the scheduler algorithm
-    var results = runScheduler(tasks, timeline);
-
-    // Print a report from the results
-    if (mode === 'csv') {
-        console.log("total_tasks,total_time,completed_tasks,elapsed_ms,read_ops,write_ops,total_ops,tasks/ms,tasks/op");
-    } else if (mode !== 'summary') {
-        console.log("Running with:", timeline.name);
-    }
-    console.log(generateReport(tasks, timeline, results, mode));
-} else {
-    // we are being required as a module so export the runScheduler
-    // function
-    exports.runScheduler = runScheduler;
-    exports.generateReport = generateReport;
-    exports.getTimelineByName = getTimeline;
-}
+exports.runScheduler = runScheduler;
+exports.generateReport = generateReport;
+exports.getTimeline = getTimeline;
