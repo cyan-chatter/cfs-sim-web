@@ -10,23 +10,30 @@ const TreeComponent = ({dimensions,data}) => {
   
   const svgRef = useRef()
 
+  // function t (){
+  //   width = document.body.clientWidth * 0.7
+  //   height = document.body.clientHeight * 0.7
+  // }
+  
+  // window.onresize = t
+
   useEffect(() => {
   
     if(!dimensions) return 
 
     const svg = d3.select(svgRef.current)
-    
+  
     //use stratify first if data not already in heirarchical format
     const root = d3.hierarchy(data)
-    console.log(data)
+  
     const treeLayout = d3.tree().size([dimensions.width ,dimensions.height])
+    
     treeLayout(root)
 
     //default style path gen for links
     const linkPathGen = d3.linkVertical()
     .source(link=>link.source).target(link=>link.target)
     .x(node=>node.x).y(node=>node.y)
-
 
     //nodes
     svg.selectAll(".node")
