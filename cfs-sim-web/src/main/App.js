@@ -31,25 +31,27 @@ const App = () => {
   }
 
   const copyValuesToRoot = (ph,pd) => {
-    setInputData({
-      number : ph.i1,
-      tq : ph.i2,
+    const iData = {
+      n : ph.n,
+      tq : ph.tq,
       pd 
-    })
+    }
+    setInputData(iData)
     setDisabledSimulate(false)
+    console.log(iData)
   }
 
   console.log('app runs Data is ', Data)
   
   var tree = null
   if(Data){
-    //tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
-    tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
+    //tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
   }
   
   return (
     <div className="App">   
-    <h1 className="App-header">VISUALIZE CFS</h1>
+    <h1 className="App-header">CFS SIMULATION</h1>
     <br/>
     <div className="Input"><Input copyValuesToRoot = {copyValuesToRoot}/></div>
     <button className="TempButton" id="Simulate" onClick={onClickToFetchHandler} disabled = {DisabledSimulate}> Simulate </button>

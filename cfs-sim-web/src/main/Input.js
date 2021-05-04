@@ -11,7 +11,7 @@ const Input = ({copyValuesToRoot}) => {
     const [DisabledNInput, setDisabledNInput] = useState(false)
     const [DisabledSubmit, setDisabledSubmit] = useState(true)
 
-    const [CurInputs,setCurInputs] = useState({I1 : null, I2: null, I3: null}) 
+    const [CurInputs,setCurInputs] = useState({id : null, at: null, bt: null, p: null}) 
     const [InputValues, setInputValues] = useState([])
 
     const inputNumber1 = useRef(0)
@@ -28,8 +28,8 @@ const Input = ({copyValuesToRoot}) => {
     }, [IInput])
 
     const onFixNumber = () => {
-        setNInput({i1 : inputNumber1.current.value, i2 : inputNumber2.current.value})
-        setIInput(inputNumber1.current.value)
+        setNInput({n : inputNumber1.current.value, tq : inputNumber2.current.value})
+        setIInput(+(inputNumber1.current.value))
         setDisabledNInput(true)
     }
 
@@ -37,26 +37,32 @@ const Input = ({copyValuesToRoot}) => {
         if(e.target.name === "I1"){
             setCurInputs({
                 ...CurInputs,
-                I1 : e.target.value
+                id : e.target.value
             })
         }
         else if(e.target.name === "I2"){
             setCurInputs({
                 ...CurInputs,
-                I2 : e.target.value
+                at : e.target.value
             })
         }
         else if(e.target.name === "I3"){
             setCurInputs({
                 ...CurInputs,
-                I3 : e.target.value
+                bt : e.target.value
+            })
+        }
+        else if(e.target.name === "I4"){
+            setCurInputs({
+                ...CurInputs,
+                p : e.target.value
             })
         }
     }
 
     const handleSubmit = () => {
         setInputValues([...InputValues,CurInputs])
-        setCurInputs({I1 : null, I2: null, I3: null})
+        setCurInputs({id: null, at: null, bt: null, p: null})
         setIInput(IInput-1)
     }
 
@@ -68,9 +74,10 @@ const Input = ({copyValuesToRoot}) => {
         return InputValues.map( (el)=>{
             return (
                 <tr>
-                    <td>{el.I1}</td>
-                    <td>{el.I2}</td>
-                    <td>{el.I3}</td>
+                    <td>{el.id}</td>
+                    <td>{el.at}</td>
+                    <td>{el.bt}</td>
+                    <td>{el.p}</td>
                 </tr>
             )
         })
@@ -81,11 +88,11 @@ const Input = ({copyValuesToRoot}) => {
         <div className="InputMain">
         <div className = "InputStart">
         <p className="labelInputBinder">
-        <label>Enter Input Number 1</label>
+        <label>Enter Number of Processes</label>
         <input type="number" className="InputNumber" ref={inputNumber1}  disabled = {DisabledNInput}></input>
         </p>
         <p className="labelInputBinder">
-        <label>Enter Input Number 2</label>
+        <label>Enter Time Quantum</label>
         <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
         </p>
         <button className="TempButton" id="Enter" onClick={onFixNumber} disabled = {DisabledNInput}> Enter </button>
@@ -94,8 +101,8 @@ const Input = ({copyValuesToRoot}) => {
         </div>
         <div className="InputValues"> 
             <h3>Values:</h3>
-            <div>{NInput ? (<><p><b className="highlight">Input Number 1</b> = <b className="highlight">{NInput.i1}</b></p><p><b className="highlight">Input Number 2</b> = <b className="highlight">{NInput.i2}</b></p></>) : null }</div> 
-            <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>I1</th> <th>I2</th> <th>I3</th> </tr> {displayInputValues()}</table>) : (<p>NONE</p>)}</div> 
+            <div>{NInput ? (<><p><b className="highlight">Number of Processes</b> = <b className="highlight">{NInput.n}</b></p><p><b className="highlight">Time Quantum</b> = <b className="highlight">{NInput.tq}</b></p></>) : null }</div> 
+            <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>Process ID</th> <th>Arrival Time</th> <th>Burst Time</th> <th>Priority</th> </tr> {displayInputValues()}</table>) : (<p>Enter the input values</p>)}</div> 
         </div>
         </>
     )

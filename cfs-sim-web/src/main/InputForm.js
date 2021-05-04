@@ -19,6 +19,10 @@ const InputForm = (props) => {
             <input name="I3" type="number" onChange={props.onInputChange}></input>
             </p>
             <p className="labelInputBinder">
+            <label> Enter Priority </label>
+            <input name="I4" type="number" onChange={props.onInputChange}></input>
+            </p>
+            <p className="labelInputBinder">
             <button className="TempButton" id="Submit" onClick={props.onSubmit}>Submit</button>
             </p>
         </React.Fragment>        
