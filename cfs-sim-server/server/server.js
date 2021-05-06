@@ -1,41 +1,33 @@
+const chalk = require('chalk')
 const express = require('express')
 const app = express()
 app.use(express.json())
 const port = 5500
 const scheduler = require('../scheduler')
 
-
-
-
-// const getResults = (timeTaken, results) => {
-//     // var curResult = {
-//     //     results, timeTaken
-//     // }
-//     var curResult = new Object()
-//     curResult.results = results
-//     curResult.timeTaken = timeTaken
-//     //console.log(curResult.results)    
-//     // for(r of curResult.results){
-//     //     
-//     // }
-//     console.log('results time data: ', curResult.results.time_data)
-//     console.log('results node stats: ', curResult.results.node_stats)
-//     current = {...curResult}
-//     //resultData.push({...curResult})
-// }
-
-var response = null
+var response = {resultData : null}
 
 //write your code here
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
-    scheduler.runScheduler(inputData, timeline)
-    response = {resultData : scheduler.resultData}
-    console.log(response.resultData)
-    response.resultData.map((curResult)=>{
-        console.log('results time data: ', curResult.results.time_data)
-        console.log('results node stats: ', curResult.results.node_stats)
-    })
+    const resultData = scheduler.runScheduler(inputData, timeline)
+    response = {resultData : resultData}
+    
+    for(var i = 0; i<response.resultData.length; ++i)
+    {
+        // console.log(response.resultData[i])
+        // // console.log('results node stats: ', rd.index.results.node_stats)
+        // console.log("Item Number " + i + ": ")
+        // console.log(chalk.orange(Object.entries(response.resultData[i].time_data))) //////////////////
+        // console.log(chalk.orange(Object.entries(response.resultData[i].node_stats))) ////////////////// 
+        for(var j=0; j<response.resultData[i].time_data.length; ++j){
+            console.log(chalk.cyanBright(response.resultData[i].time_data[j]))
+            console.log(chalk.cyanBright(response.resultData[i].time_data[j]))
+        }
+    }
+
+    
+
 }
 
 const inputData = {

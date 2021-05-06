@@ -1,3 +1,5 @@
+const chalk = require('chalk')
+
 // Node vs browser behavior
 if (typeof module !== 'undefined') {
     var binaryTree = require('./bint'),
@@ -8,12 +10,14 @@ if (typeof module !== 'undefined') {
         exports = scheduler;
 }
 
-var resultData = []
+
 
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
     // queue of tasks sorted in arrival_time order
     
+    var resultData = []
+
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
     var time_queue_idx = 0;
@@ -91,28 +95,34 @@ function runScheduler(tasks, timeline) {
             running_task.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / running_task.priority);
             running_task.truntime++;
             tresults.running_task = running_task;
-            console.log(curTime + ": " + running_task.id);
+            console.log(curTime + ": " + running_task.id); ///////////////////////////
             if (running_task.truntime >= running_task.burst_time) {
                 ++tasksCompleted
                 running_task.completed_time = curTime
                 tresults.completed_task = running_task
                 task_done = true; // Set running_task to null later
-                console.log("Completed task:", running_task.id);
+                console.log("Completed task:", running_task.id);//////////////////////////////////
             }
         }
 
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
 
         results.time_data[curTime] = tresults;
-        // if (callback) {
-        //     callback(curTime, results);
-        // }
 
-        var curResult = new Object()
-        curResult.curTime = curTime
-        curResult.results = results
+        //console.log(chalk.greenBright(Object.entries(results)))
 
-        resultData.push(curResult)
+        //const newObj = {curTime,results}
+        resultData.push(results)
+
+        console.log(chalk.redBright("Pushed: "))
+        console.log(chalk.redBright(Object.entries(resultData[resultData.length-1].time_data)))
+        
+        
+        resultData.map((rd,i)=>{
+            console.log(chalk.greenBright("Item Number " + i + ": "))
+            console.log(chalk.greenBright(Object.entries(rd.time_data)))
+            
+        })
 
         if (task_done) {
             running_task = null;
@@ -124,11 +134,25 @@ function runScheduler(tasks, timeline) {
         timeline.insert(running_task);
     }
 
+    resultData.map((rd,i)=>{
+        console.log("Item Number " + i + ": ")
+        console.log(chalk.blue(Object.entries(rd.time_data))) //////////////////
+        
+    })
+    
+
     //binarytree.RESET_STATS();
     results.node_stats = binaryTree.GET_STATS();
     results.elapsed_ms = (new Date().getTime()) - start_ms;
 
-    return results;
+    resultData.map((rd,i)=>{
+        console.log("Item Number " + i + ": ")
+        //console.log(chalk.yellow(Object.entries(rd.index.results))) //////////////////
+        console.log(chalk.yellow(Object.entries(rd.time_data))) //////////////////
+        console.log(chalk.yellow(Object.entries(rd.node_stats))) //////////////////
+    })
+    
+    return resultData;
 }
 
 function generateSummary(tasks, timeline, results) {
@@ -250,4 +274,3 @@ function getTimeline() {
 exports.runScheduler = runScheduler;
 exports.generateReport = generateReport;
 exports.getTimeline = getTimeline;
-exports.resultData = resultData;
