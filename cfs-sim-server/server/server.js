@@ -4,21 +4,38 @@ app.use(express.json())
 const port = 5500
 const scheduler = require('../scheduler')
 
-var resultData = []
 
-const getResults = (timeTaken, results) => {
-    const curResult = {
-        results, timeTaken
-    }
-    
-    resultData.push(curResult)
-}
 
+
+// const getResults = (timeTaken, results) => {
+//     // var curResult = {
+//     //     results, timeTaken
+//     // }
+//     var curResult = new Object()
+//     curResult.results = results
+//     curResult.timeTaken = timeTaken
+//     //console.log(curResult.results)    
+//     // for(r of curResult.results){
+//     //     
+//     // }
+//     console.log('results time data: ', curResult.results.time_data)
+//     console.log('results node stats: ', curResult.results.node_stats)
+//     current = {...curResult}
+//     //resultData.push({...curResult})
+// }
+
+var response = null
 
 //write your code here
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
-    scheduler.runScheduler(inputData, timeline, getResults)
+    scheduler.runScheduler(inputData, timeline)
+    response = {resultData : scheduler.resultData}
+    console.log(response.resultData)
+    response.resultData.map((curResult)=>{
+        console.log('results time data: ', curResult.results.time_data)
+        console.log('results node stats: ', curResult.results.node_stats)
+    })
 }
 
 const inputData = {
@@ -40,15 +57,15 @@ const inputData = {
     ]
 }
 
-console.log(inputData) 
+//console.log(inputData) 
 schedulerMain(inputData)
 
-const response = {resultData : resultData}
 
-for(r of resultData){
-    console.log('results time data: ', r.results.time_data)
-    console.log('results node stats: ', r.results.node_stats)
-}
+
+// for(r of resultData){
+//     console.log('results time data: ', r.results.time_data)
+//     console.log('results node stats: ', r.results.node_stats)
+// }
 
 
 // console.log(response.results.time_data)
