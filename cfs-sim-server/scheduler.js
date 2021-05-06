@@ -8,10 +8,11 @@ if (typeof module !== 'undefined') {
         exports = scheduler;
 }
 
-// runScheduler: Run scheduler algorithm
-function runScheduler(tasks, timeline, callback) {
-    // queue of tasks sorted in arrival_time order
+var resultData = []
 
+// runScheduler: Run scheduler algorithm
+function runScheduler(tasks, timeline) {
+    // queue of tasks sorted in arrival_time order
     
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
@@ -103,9 +104,15 @@ function runScheduler(tasks, timeline, callback) {
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
 
         results.time_data[curTime] = tresults;
-        if (callback) {
-            callback(curTime, results);
-        }
+        // if (callback) {
+        //     callback(curTime, results);
+        // }
+
+        var curResult = new Object()
+        curResult.curTime = curTime
+        curResult.results = results
+
+        resultData.push(curResult)
 
         if (task_done) {
             running_task = null;
@@ -243,3 +250,4 @@ function getTimeline() {
 exports.runScheduler = runScheduler;
 exports.generateReport = generateReport;
 exports.getTimeline = getTimeline;
+exports.resultData = resultData;
