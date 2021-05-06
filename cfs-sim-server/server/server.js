@@ -5,28 +5,27 @@ app.use(express.json())
 const port = 5500
 const scheduler = require('../scheduler')
 
-var response = {resultData : null}
+var response = null
 
 //write your code here
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
-    const resultData = scheduler.runScheduler(inputData, timeline)
-    response = {resultData : resultData}
-    
-    for(var i = 0; i<response.resultData.length; ++i)
-    {
-        // console.log(response.resultData[i])
-        // // console.log('results node stats: ', rd.index.results.node_stats)
-        // console.log("Item Number " + i + ": ")
-        // console.log(chalk.orange(Object.entries(response.resultData[i].time_data))) //////////////////
-        // console.log(chalk.orange(Object.entries(response.resultData[i].node_stats))) ////////////////// 
-        for(var j=0; j<response.resultData[i].time_data.length; ++j){
-            console.log(chalk.cyanBright(response.resultData[i].time_data[j]))
-            console.log(chalk.cyanBright(response.resultData[i].time_data[j]))
-        }
-    }
+    var response = scheduler.runScheduler(inputData, timeline)
+    // console.log("respone -> \n", response)
+    // console.log(response.length)
 
-    
+    // for(let i of response.time_data){
+    //     for(let j of i){
+    //         console.log("j -> ", j)
+    //         for(var key in j.running_task){
+    //             console.log(key, j.running_task[key])
+    //         }
+    //     }
+    // }
+
+    // for(let i of response.timelineData){
+    //     console.log("timeline -> \n", i)
+    // }
 
 }
 
