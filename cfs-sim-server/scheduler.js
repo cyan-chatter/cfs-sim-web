@@ -28,11 +28,11 @@ function runScheduler(tasks, timeline) {
     // current running task or null if no tasks are running.
     // Initialize statistics gathering
 
-
-    var results = {time_data: [], timelineData: []};
     var start_ms = new Date().getTime();
     binaryTree.RESET_STATS();
     var tasksCompleted = 0
+
+    var results = {time_data: [], timelineData: []}
 
     // Loop from time/tick 0 through the total time/ticks specified
 
@@ -49,6 +49,8 @@ function runScheduler(tasks, timeline) {
             completed_task: null
         };
 
+        
+
         // Check tasks at the beginning of the task queue. Add any to
         // the timeline structure when the arrival_time for those tasks
         // has arrived.
@@ -60,7 +62,7 @@ function runScheduler(tasks, timeline) {
             new_task.truntime = 0;
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
-            results.timelineData.push({...timeline})
+            //results.timelineData.push({...timeline})----------------timelineData
         }
 
         // If there is a task running and its vruntime exceeds
@@ -69,7 +71,7 @@ function runScheduler(tasks, timeline) {
         // added back to the timeline.
         if (running_task && (running_task.vruntime > min_vruntime)) {
             timeline.insert(running_task);
-            results.timelineData.push({...timeline})
+            //results.timelineData.push({...timeline})----------------timelineData
             running_task = null;
         }
 
@@ -82,7 +84,7 @@ function runScheduler(tasks, timeline) {
             var min_node = timeline.min();
             running_task = min_node.val;
             timeline.remove(min_node);
-            results.timelineData.push({...timeline})
+            //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
             }
@@ -97,25 +99,26 @@ function runScheduler(tasks, timeline) {
             running_task.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / running_task.priority);
             running_task.truntime++;
             tresults.running_task = running_task;
-            console.log(curTime + ": " + running_task.id); ///////////////////////////
+            //console.log(curTime + ": " + running_task.id); ///////////////////////////
             if (running_task.truntime >= running_task.burst_time) {
                 ++tasksCompleted
                 running_task.completed_time = curTime
                 tresults.completed_task = running_task
                 task_done = true; // Set running_task to null later
-                console.log("Completed task:", running_task.id);//////////////////////////////////
+                //console.log("Completed task:", running_task.id);//////////////////////////////////
             }
         }
 
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
 
+        //results.time_data.push({...tresults});
         results.time_data.push({...tresults});
         // if (callback) {
         //     callback(curTime, results);
         // }
 
-        const tempRes = new Object({...results});
-        resultData.push(tempRes)
+        //const tempRes = new Object({...results});
+        resultData.push({...results})
         // console.log("pushed..\n", tempRes.timelineData)
         // for(let i of tempRes.timelineData){
         //     for(var key in i){
@@ -141,25 +144,31 @@ function runScheduler(tasks, timeline) {
     // Put any currently running task back in the timeline
     if (running_task) {
         timeline.insert(running_task);
-        results.timelineData.push({...timeline})
+        //results.timelineData.push({...timeline})----------------timelineData
     }
 
-    resultData.map((rd,i)=>{
-        console.log("Item Number " + i + ": ")
-        console.log(chalk.blue(Object.entries(rd.time_data))) //////////////////
-        
-    })
-    
+    const response = {
+        resultData,
+        node_stats : binaryTree.GET_STATS(),
+        elapsed_ms : (new Date().getTime()) - start_ms
+    }
 
     //binarytree.RESET_STATS();
-    results.node_stats = binaryTree.GET_STATS();
-    results.elapsed_ms = (new Date().getTime()) - start_ms;
-    const tempRes = new Object({...results});
-    resultData.push(tempRes)
+    //resultData.node_stats = binaryTree.GET_STATS();
+    //resultData.elapsed_ms = (new Date().getTime()) - start_ms;
+    //const tempRes = new Object({...results});
+    
     // console.log("pushed..\n", temp.time_data)
 
-    return resultData;
+    return response
 }
+
+
+
+
+
+
+//-------------------------------------------------------//
 
 function generateSummary(tasks, timeline, results) {
     var out = "", tnodes = [], hvals = [];
@@ -169,7 +178,7 @@ function generateSummary(tasks, timeline, results) {
             (node.color ? "/" + node.color : ""));
     }, "in");
 
-    results.timelineData.push({...timeline})
+    //results.timelineData.push({...timeline})----------------timelineData
 
     for (var i = 0; i < results.time_data.length; i++) {
         var t = results.time_data[i];
@@ -183,6 +192,7 @@ function generateSummary(tasks, timeline, results) {
     return out;
 
 }
+
 
 function generateReport(tasks, timeline, results, mode) {
     var reads = 0, writes = 0, total = 0, completed = 0, out = "";
@@ -265,7 +275,7 @@ function generateReport(tasks, timeline, results, mode) {
         out += "                total  : " + total + "\n";
         out += "Throughput: " + (completed / results.elapsed_ms) + " completed tasks/ms\n";
         out += "            " + (completed / total) + " completed tasks/operation\n";
-        console.log("Tasks per tick:", tasks_per_tick);
+        //console.log("Tasks per tick:", tasks_per_tick);
     }
 
     return out;
@@ -279,7 +289,11 @@ function getTimeline() {
     return rbt.RBT(vsort);
 }
 
+//----------------------------------------------------------------//
+
+
+
 exports.runScheduler = runScheduler;
 exports.generateReport = generateReport;
 exports.getTimeline = getTimeline;
-// exports.resultData = resultData;
+

@@ -11,22 +11,8 @@ var response = null
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
     var response = scheduler.runScheduler(inputData, timeline)
-    // console.log("respone -> \n", response)
-    // console.log(response.length)
-
-    // for(let i of response.time_data){
-    //     for(let j of i){
-    //         console.log("j -> ", j)
-    //         for(var key in j.running_task){
-    //             console.log(key, j.running_task[key])
-    //         }
-    //     }
-    // }
-
-    // for(let i of response.timelineData){
-    //     console.log("timeline -> \n", i)
-    // }
-
+    console.log(chalk.yellowBright(JSON.stringify(response)))
+    return response
 }
 
 const inputData = {
@@ -49,18 +35,31 @@ const inputData = {
 }
 
 //console.log(inputData) 
-schedulerMain(inputData)
+response = schedulerMain(inputData)
+
+for(let i of response.resultData){
+        
+    //time_data
+        for(let j of i.time_data){
+            
+            for(var key in j.running_task){
+                console.log(chalk.greenBright(key, j.running_task[key]))
+            }
+        }
+
+    //timelineData
+    // for(let j of i.timelineData){
+        
+    //     for(var key in j){
+    //         console.log(chalk.cyanBright(key, j[key]))
+    //     }
+    // }    
+    
+}
+
+    
 
 
-
-// for(r of resultData){
-//     console.log('results time data: ', r.results.time_data)
-//     console.log('results node stats: ', r.results.node_stats)
-// }
-
-
-// console.log(response.results.time_data)
-// console.log(response.results.node_stats)
 
 
 // app.post('/', function (req, res) {
