@@ -4,38 +4,28 @@ app.use(express.json())
 const port = 5500
 const scheduler = require('../scheduler')
 
-
-
-
-// const getResults = (timeTaken, results) => {
-//     // var curResult = {
-//     //     results, timeTaken
-//     // }
-//     var curResult = new Object()
-//     curResult.results = results
-//     curResult.timeTaken = timeTaken
-//     //console.log(curResult.results)    
-//     // for(r of curResult.results){
-//     //     
-//     // }
-//     console.log('results time data: ', curResult.results.time_data)
-//     console.log('results node stats: ', curResult.results.node_stats)
-//     current = {...curResult}
-//     //resultData.push({...curResult})
-// }
-
 var response = null
 
 //write your code here
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
-    scheduler.runScheduler(inputData, timeline)
-    response = {resultData : scheduler.resultData}
-    console.log(response.resultData)
-    response.resultData.map((curResult)=>{
-        console.log('results time data: ', curResult.results.time_data)
-        console.log('results node stats: ', curResult.results.node_stats)
-    })
+    var response = scheduler.runScheduler(inputData, timeline)
+    // console.log("respone -> \n", response)
+    // console.log(response.length)
+
+    // for(let i of response.time_data){
+    //     for(let j of i){
+    //         console.log("j -> ", j)
+    //         for(var key in j.running_task){
+    //             console.log(key, j.running_task[key])
+    //         }
+    //     }
+    // }
+
+    // for(let i of response.timelineData){
+    //     console.log("timeline -> \n", i)
+    // }
+
 }
 
 const inputData = {
