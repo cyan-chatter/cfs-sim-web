@@ -35,12 +35,11 @@ const TreeComponent = ({dimensions,data}) => {
       return a.val.vruntime - b.val.vruntime;
     }
 
-    
-    const curTree = data ////
-
+    const curTrees = data.simTrees ////
+    console.log("data in dynamic tree: ", curTrees)
 
     var nilIdx = 0
-    var tree = d3.layout.tree()
+    var tree = d3.layout.tree()  /////////////
       .size([curDim.width ,curDim.height])
       .children(function(n) {
         var c = [];
@@ -71,6 +70,8 @@ const TreeComponent = ({dimensions,data}) => {
         }
     })
 
+    //root = d3.hierarchy(treeData, function(d) { return d.children; });
+
     // const linkPathGen = d3.linkVertical()
     // .source(link=>link.source)
     // .target(link=>link.target)
@@ -87,13 +88,13 @@ const TreeComponent = ({dimensions,data}) => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     function update(sourceTree) {
-      root = sourceTree.root();
+      var root = sourceTree.root() ///
     
       if (root.val === 'NIL') {  ///////check
           root = {p: {}, val: 'NIL'};
       }
     
-      root.x0 = height / 2;
+      root.x0 = curDim.height  / 2; ///
       root.y0 = 0;
     
       // Don't update the read counts while scanning the tree
@@ -205,7 +206,12 @@ const TreeComponent = ({dimensions,data}) => {
 
     }
 
-
+    for(var i=0; i<curTrees.length; ++i){
+        
+        setTimeout(()=>{
+            update(curTrees[i]);
+        },500)
+    }
     
   }, [dimensions,data])
 

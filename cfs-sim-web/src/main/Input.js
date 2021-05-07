@@ -110,7 +110,7 @@ const Input = ({copyValuesToRoot}) => {
         <label>Enter Total Time</label>
         <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
         </p>
-        <p>{message != '' ? (message) : null}</p>
+        <p>{message !== '' ? (message) : null}</p>
         <button className="TempButton" id="Enter" onClick={onFixNumber} disabled = {DisabledNInput}> Enter </button>
         </div>    
         <div className="InputForm"> {IInput > 0 ? createInputForm() : null} </div>

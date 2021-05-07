@@ -1,6 +1,7 @@
 import '../design/App.css'
 import React, {useState, useEffect, useRef} from 'react'
 import TreeComponent from './TreeComponent'
+import DynamicTree from './DynamicTree'
 import Input from './Input'
 import {useData} from './useData'
 import {useWindowSize} from './useWindowSize'
@@ -50,7 +51,7 @@ const App = () => {
   var tree = null
   if(Data){
     //tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
-    //tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
     console.log(Data)
   }
   
