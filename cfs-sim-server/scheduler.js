@@ -10,7 +10,12 @@ if (typeof module !== 'undefined') {
         exports = scheduler;
 }
 
-
+var response = {
+    resultData : [],
+    node_stats : null,
+    elapsed_ms : null,
+    simTrees : []
+}
 
 
 function saveTimeline(simTree,task,taskId,message){
@@ -29,15 +34,18 @@ function saveTimeline(simTree,task,taskId,message){
     // for(keys in simTree){
     //     console.log(chalk.yellow(keys),chalk.yellow(simTree[keys]))
     // }
+
+    response.simTrees.push(simTree)
     
 }
 
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
+
     
     var simTree = new rbt.RBT()
     
-    var resultData = []
+    //var resultData = []
 
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
@@ -172,7 +180,7 @@ function runScheduler(tasks, timeline) {
         // }
 
         const tempRes = new Object({...results});
-        resultData.push(tempRes.time_data)
+        response.resultData.push(tempRes.time_data)
         // console.log("pushed..\n", tempRes.timelineData)
         // for(let i of tempRes.timelineData){
         //     for(var key in i){
@@ -216,12 +224,8 @@ function runScheduler(tasks, timeline) {
         //results.timelineData.push({...timeline})----------------timelineData
     }
 
-    
-    const response = {
-        resultData,
-        node_stats : binaryTree.GET_STATS(),
-        elapsed_ms : (new Date().getTime()) - start_ms
-    }
+    response.node_stats = binaryTree.GET_STATS()
+    response.elapsed_ms = (new Date().getTime()) - start_ms 
 
     //binaryTree.RESET_STATS();
     //results.node_stats = binaryTree.GET_STATS();
