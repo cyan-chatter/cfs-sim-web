@@ -35,9 +35,12 @@ function runScheduler(tasks, timeline) {
     var results = {time_data: [], timelineData: []}
 
     // Loop from time/tick 0 through the total time/ticks specified
+    var running_task = null;
 
+    // Loop from time/tick 0 through the total time/ticks specified
     for (var curTime = 0; curTime < tasks.total_time; curTime++) {
-        var running_task = null;
+        var curTask = null
+        if(running_task != null) curTask = {...running_task}
         // Periodic debug output
         if (curTime % 500 === 0) {
             //console.error("curTime: " + curTime + ", size: " + timeline.size() + ", task index: " + time_queue_idx);
@@ -55,7 +58,7 @@ function runScheduler(tasks, timeline) {
         // the timeline structure when the arrival_time for those tasks
         // has arrived.
         while (time_queue_idx < time_queue.length && curTime >= time_queue[time_queue_idx].arrival_time) {
-            var new_task = time_queue[time_queue_idx++];
+            var new_task = {...time_queue[time_queue_idx++]};
             // new tasks get their vruntime set to the current
             // min_vruntime
             new_task.vruntime = min_vruntime;
@@ -69,10 +72,10 @@ function runScheduler(tasks, timeline) {
         // min_vruntime then add it back to the timeline. Since
         // vruntime is greater it won't change min_vruntime when it's
         // added back to the timeline.
-        if (running_task && (running_task.vruntime > min_vruntime)) {
-            timeline.insert(running_task);
-            //results.timelineData.push({...timeline})----------------timelineData
-            running_task = null;
+        if (curTask && (curTask.vruntime > min_vruntime)) {
+            timeline.insert(curTask);
+            results.timelineData.push({...timeline})
+            curTask = null;
         }
 
         // If there is no running task (which may happen right after
@@ -80,9 +83,9 @@ function runScheduler(tasks, timeline) {
         // the task with the smallest vruntime on the timeline, remove
         // it and set it as the running_task and determine the new
         // min_vruntime.
-        if (!running_task && timeline.size() > 0) {
+        if (!curTask && timeline.size() > 0) {
             var min_node = timeline.min();
-            running_task = min_node.val;
+            curTask = min_node.val;
             timeline.remove(min_node);
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
@@ -95,17 +98,17 @@ function runScheduler(tasks, timeline) {
         // burst_time then report it as completed and set running_task
         // to null.
         var task_done = false;
-        if (running_task) {
-            running_task.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / running_task.priority);
-            running_task.truntime++;
-            tresults.running_task = running_task;
-            //console.log(curTime + ": " + running_task.id); ///////////////////////////
-            if (running_task.truntime >= running_task.burst_time) {
+        if (curTask) {
+            curTask.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / curTask.priority);
+            curTask.truntime++;
+            tresults.running_task = curTask;
+            console.log(curTime + ": " + curTask.id);
+            if (curTask.truntime >= curTask.burst_time) {
                 ++tasksCompleted
-                running_task.completed_time = curTime
-                tresults.completed_task = running_task
-                task_done = true; // Set running_task to null later
-                //console.log("Completed task:", running_task.id);//////////////////////////////////
+                curTask.completed_time = curTime
+                tresults.completed_task = curTask
+                task_done = true; // Set curTask to null later
+                console.log("Completed task:", curTask.id);
             }
         }
 
@@ -117,8 +120,8 @@ function runScheduler(tasks, timeline) {
         //     callback(curTime, results);
         // }
 
-        //const tempRes = new Object({...results});
-        resultData.push({...results})
+        const tempRes = new Object({...results});
+        resultData.push(tempRes.time_data)
         // console.log("pushed..\n", tempRes.timelineData)
         // for(let i of tempRes.timelineData){
         //     for(var key in i){
@@ -137,8 +140,10 @@ function runScheduler(tasks, timeline) {
         // }
 
         if (task_done) {
-            running_task = null;
+            curTask = null;
         }
+
+        running_task = curTask
     }
 
     // Put any currently running task back in the timeline
@@ -159,6 +164,23 @@ function runScheduler(tasks, timeline) {
     //const tempRes = new Object({...results});
     
     // console.log("pushed..\n", temp.time_data)
+
+    const tempRes = new Object({...results});
+    resultData.push(tempRes.time_data)
+
+    response.node_stats = binaryTree.GET_STATS();
+    response.elapsed_ms = (new Date().getTime()) - start_ms;
+    
+    // console.log("pushed..\n", temp.time_data)
+
+    for(let i of resultData){
+        for(let j of i){
+            // console.log("j -> ", j)
+            for(var key in j.running_task){
+                console.log(key, j.running_task[key])
+            }
+        }
+    }
 
     return response
 }
