@@ -10,13 +10,34 @@ if (typeof module !== 'undefined') {
         exports = scheduler;
 }
 
-// runScheduler: Run scheduler algorithm
 
+
+
+function saveTimeline(simTree,task,taskId,message){
+    
+    
+    // var config = {
+    //     color : opts.color,
+    //     p : opts.p,
+    //     left : opts.left,
+    //     right : opts.right
+    // }
+
+    console.log(chalk.green(simTree),chalk.blue(taskId),chalk.red(message))
+    for(keys in task){
+        console.log(chalk.yellow(keys),chalk.yellow(task[keys]))
+    }
+    
+}
+
+// runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
+    
+    var simTree = new rbt.RBT()
+    
     var resultData = []
 
     // queue of tasks sorted in arrival_time order
-
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
     var time_queue_idx = 0;
@@ -65,6 +86,10 @@ function runScheduler(tasks, timeline) {
             new_task.truntime = 0;
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
+            
+            simTree.insert('n', new_task.vruntime, new_task.id)
+            const message = "Adding " + new_task.id + " with vruntime " + new_task.vruntime
+            saveTimeline(simTree,new_task,new_task.id,message)
             //results.timelineData.push({...timeline})----------------timelineData
         }
 
@@ -73,9 +98,13 @@ function runScheduler(tasks, timeline) {
         // vruntime is greater it won't change min_vruntime when it's
         // added back to the timeline.
         if (curTask && (curTask.vruntime > min_vruntime)) {
-            timeline.insert(curTask);
-            results.timelineData.push({...timeline})
-            curTask = null;
+            timeline.insert(curTask)
+            
+            simTree.insert('n', curTask.vruntime, curTask.id)
+            const message = "Inserting " + curTask.id + " with vruntime " + curTask.vruntime
+            //results.timelineData.push({...timeline})----------------timelineData
+            curTask = null
+            saveTimeline(simTree,curTask,"-",message)
         }
 
         // If there is no running task (which may happen right after
@@ -87,10 +116,15 @@ function runScheduler(tasks, timeline) {
             var min_node = timeline.min();
             curTask = min_node.val;
             timeline.remove(min_node);
+
+            simTree.remove(simTree.min());
+            var message = "Removing " + running_task.id + " with vruntime " + running_task.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
+                message += " Updating min_vruntime to " + min_vruntime
             }
+            saveTimeline(simTree,running_task,running_task.id,message)
         }
 
         // Update the running_task (if any) by increasing the vruntime
@@ -109,10 +143,25 @@ function runScheduler(tasks, timeline) {
                 tresults.completed_task = curTask
                 task_done = true; // Set curTask to null later
                 console.log("Completed task:", curTask.id);
+                const message = curTask.id + " is over"
+                saveTimeline(simTree,curTask,"-",message)
             }
         }
 
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
+        
+        console.log("pure tresults in each iteration ->") 
+        console.log(tresults.running_task)
+        console.log(tresults.completed_task)
+        console.log(tresults.num_tasks)
+        
+        results.time_data.push({...tresults})////////////////
+        
+        for(let j of results.time_data){
+            for(var key in j.running_task){
+                console.log(chalk.blueBright(key, j.running_task[key]))
+            }
+        }
 
         //results.time_data.push({...tresults});
         results.time_data.push({...tresults});
@@ -129,15 +178,26 @@ function runScheduler(tasks, timeline) {
         //     }
         // }
 
-        // console.log("complete array -> \n")
         // for(let i of resultData){
-        //     for(let j of i){
-        //         // console.log("j -> ", j)
-        //         for(var key in j.running_task){
-        //             console.log(key, j.running_task[key])
+        
+        //     //time_data
+        //         for(let j of i.time_data){
+                    
+        //             for(var key in j.running_task){
+        //                 console.log(chalk.green(key, j.running_task[key]))
+        //             }
         //         }
-        //     }
+        
+        //     //timelineData
+        //     // for(let j of i.timelineData){
+                
+        //     //     for(var key in j){
+        //     //         console.log(chalk.cyanBright(key, j[key]))
+        //     //     }
+        //     // }    
+            
         // }
+
 
         if (task_done) {
             curTask = null;
@@ -148,22 +208,24 @@ function runScheduler(tasks, timeline) {
 
     // Put any currently running task back in the timeline
     if (running_task) {
-        timeline.insert(running_task);
+        timeline.insert(running_task)
+        const message = running_task.id + " is running"
+        saveTimeline(simTree,running_task.id,message)
         //results.timelineData.push({...timeline})----------------timelineData
     }
 
+    
     const response = {
         resultData,
         node_stats : binaryTree.GET_STATS(),
         elapsed_ms : (new Date().getTime()) - start_ms
     }
 
-    //binarytree.RESET_STATS();
-    //resultData.node_stats = binaryTree.GET_STATS();
-    //resultData.elapsed_ms = (new Date().getTime()) - start_ms;
+    //binaryTree.RESET_STATS();
+    //results.node_stats = binaryTree.GET_STATS();
+    //results.elapsed_ms = (new Date().getTime()) - start_ms;
     //const tempRes = new Object({...results});
     
-    // console.log("pushed..\n", temp.time_data)
 
     const tempRes = new Object({...results});
     resultData.push(tempRes.time_data)

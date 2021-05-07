@@ -2,8 +2,8 @@
 
 // Node vs browser behavior
 if (typeof module !== 'undefined') {
-    var binaryTree = require('./bint'),
-        NIL = binaryTree.NIL,
+    var binarytree = require('./bint'),
+        NIL = binarytree.NIL,
         bst = require('./bst');
 } else {
     var rbt = {},
@@ -11,7 +11,7 @@ if (typeof module !== 'undefined') {
 }
 
 // CLRS 13.2
-function treeLeftRotate(tree, node) {
+function treeLeftRotate(tree,node) {
     var x = node,
         y = x.right;     // set y
     x.right = y.left;    // turn y's left into x's right
@@ -33,7 +33,7 @@ function treeLeftRotate(tree, node) {
 }
 
 // CLRS 13.2
-function treeRightRotate(tree, node) {
+function treeRightRotate(tree,node) {
     var x = node,
         y = x.left;      // set y
     x.left = y.right;    // turn y's right into x's left
@@ -71,11 +71,11 @@ function redblackInsertFixup(tree, node) {
                 if (z === z.p.right) {
                     // case 2
                     z = z.p;
-                    tree = treeLeftRotate(tree, z);
+                    tree = treeLeftRotate(tree,z);
                 }
                 z.p.color = 'b';
                 z.p.p.color = 'r';
-                tree = treeRightRotate(tree, z.p.p);
+                tree = treeRightRotate(tree,z.p.p);
             }
         } else {
             // same but mirror image
@@ -90,11 +90,11 @@ function redblackInsertFixup(tree, node) {
                 if (z === z.p.left) {
                     // case 2
                     z = z.p;
-                    tree = treeRightRotate(tree, z);
+                    tree = treeRightRotate(tree,z);
                 }
                 z.p.color = 'b';
                 z.p.p.color = 'r';
-                tree = treeLeftRotate(tree, z.p.p);
+                tree = treeLeftRotate(tree,z.p.p);
             }
         }
     }
@@ -164,10 +164,10 @@ function redblackRemoveFixup(tree, node) {
                 // case 1
                 w.color = 'b';
                 x.p.color = 'r';
-                tree = treeLeftRotate(tree, x.p);
+                tree = treeLeftRotate(tree,x.p);
                 w = x.p.right;
             }
-            if (w.left.color === 'b' && w.right.color === 'b') {
+            if (w.left.color === 'b' && w.right.color ==='b') {
                 //console.log("2.2: ", JSON.stringify(bst.treeTuple(tree)));
                 // case 2
                 w.color = 'r';
@@ -178,7 +178,7 @@ function redblackRemoveFixup(tree, node) {
                     // case 3
                     w.left.color = 'b';
                     w.color = 'r';
-                    tree = treeRightRotate(tree, w);
+                    tree = treeRightRotate(tree,w);
                     w = x.p.right;
                 }
                 //console.log("2.4: ", JSON.stringify(bst.treeTuple(tree)));
@@ -186,7 +186,7 @@ function redblackRemoveFixup(tree, node) {
                 w.color = x.p.color;
                 x.p.color = 'b';
                 w.right.color = 'b';
-                tree = treeLeftRotate(tree, x.p);
+                tree = treeLeftRotate(tree,x.p);
                 x = tree;
             }
         } else {
@@ -196,10 +196,10 @@ function redblackRemoveFixup(tree, node) {
                 // case 1
                 w.color = 'b';
                 x.p.color = 'r';
-                tree = treeRightRotate(tree, x.p);
+                tree = treeRightRotate(tree,x.p);
                 w = x.p.left;
             }
-            if (w.right.color === 'b' && w.left.color === 'b') {
+            if (w.right.color === 'b' && w.left.color ==='b') {
                 //console.log("3.2: ", JSON.stringify(bst.treeTuple(tree)));
                 // case 2
                 w.color = 'r';
@@ -210,7 +210,7 @@ function redblackRemoveFixup(tree, node) {
                     // case 3
                     w.right.color = 'b';
                     w.color = 'r';
-                    tree = treeLeftRotate(tree, w);
+                    tree = treeLeftRotate(tree,w);
                     w = x.p.left;
                 }
                 //console.log("3.4: ", JSON.stringify(bst.treeTuple(tree)));
@@ -218,7 +218,7 @@ function redblackRemoveFixup(tree, node) {
                 w.color = x.p.color;
                 x.p.color = 'b';
                 w.left.color = 'b';
-                tree = treeRightRotate(tree, x.p);
+                tree = treeRightRotate(tree,x.p);
                 x = tree;
             }
         }
@@ -239,33 +239,31 @@ function redblackRemove(tree, node) {
     if (z.left === NIL) {
         x = z.right;
         //console.log("1.1 x: ", bst.treeTuple(x));
-        tree = redblackTransplant(tree, z, z.right);
+        tree = redblackTransplant(tree,z,z.right);
     } else if (z.right === NIL) {
         x = z.left;
         //console.log("1.2 x: ", bst.treeTuple(x));
-        tree = redblackTransplant(tree, z, z.left);
+        tree = redblackTransplant(tree,z,z.left);
     } else {
         y = bst.bstMin(z.right);
         origColor = y.color;
         x = y.right;
-        //console.log("1.3 x: ", binaryTree.treeTuple(x));
+        //console.log("1.3 x: ", binarytree.treeTuple(x));
         if (x && y.p === z) {
             x.p = y;
         } else {
-            tree = redblackTransplant(tree, y, y.right);
+            tree = redblackTransplant(tree,y,y.right);
             y.right = z.right;
-            if (y.right) {
-                y.right.p = y;
-            }
+            if (y.right) { y.right.p = y; }
         }
-        tree = redblackTransplant(tree, z, y);
+        tree = redblackTransplant(tree,z,y);
         y.left = z.left;
         y.left.p = y;
         y.color = z.color;
     }
     if (x && origColor === 'b') {
-        //console.log("1.10 x: ", binaryTree.treeTuple(x));
-        tree = redblackRemoveFixup(tree, x);
+        //console.log("1.10 x: ", binarytree.treeTuple(x));
+        tree = redblackRemoveFixup(tree,x);
     }
     return tree;
 }
@@ -297,15 +295,3 @@ exports.redblackInsert = redblackInsert;
 exports.redblackRemoveFixup = redblackRemoveFixup;
 exports.redblackRemove = redblackRemove;
 exports.RBT = RBT;
-
-// const exportObject = {
-//     treeLeftRotate,
-//     treeRightRotate,
-//     redblackInsertFixup,
-//     redblackInsert,
-//     redblackRemoveFixup,
-//     redblackRemove,
-//     RBT
-// }
-//
-// export default  exportObject

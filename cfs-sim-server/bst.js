@@ -2,8 +2,8 @@
 
 // Node vs browser behavior
 if (typeof module !== 'undefined') {
-    var binaryTree = require('./bint'),
-        NIL = binaryTree.NIL;
+    var binarytree = require('./bint'),
+        NIL = binarytree.NIL;
 } else {
     var bst = {},
         exports = bst;
@@ -12,12 +12,12 @@ if (typeof module !== 'undefined') {
 // bstSearch: Search the tree for value.
 // Returns the matching node.
 // Based on TREE-SEARCH defintion in CLRS 12.2
-function bstSearch(tree, value) {
+function bstSearch (tree, value) {
     if (tree === NIL) {
         return null;
-    } else if (tree.cmp({val: value}) === 0) {
+    } else if (tree.cmp({val:value}) === 0) {
         return tree;
-    } else if (tree.cmp({val: value}) > 0) {
+    } else if (tree.cmp({val:value}) > 0) {
         return bstSearch(tree.left, value);
     } else {
         return bstSearch(tree.right, value);
@@ -53,7 +53,7 @@ function bstMax(tree) {
 // bstInsert: Add the value to the tree. Returns new tree (root node
 // could have changed)
 // Based on TREE-INSERT definition in CLRS 12.3
-function bstInsert(tree, node) {
+function bstInsert (tree, node) {
     var x = tree,
         y = NIL,
         z = node;
@@ -98,21 +98,21 @@ function bstTransplant(tree, dst, src) {
 
 // bstRemove
 // Based on TREE-DELETE definition in CLRS 12.3
-function bstRemove(tree, node) {
+function bstRemove (tree, node) {
     var z = node,
         y;
     if (z.left === NIL) {
-        tree = bstTransplant(tree, z, z.right);
+        tree = bstTransplant(tree,z,z.right);
     } else if (z.right === NIL) {
-        tree = bstTransplant(tree, z, z.left);
+        tree = bstTransplant(tree,z,z.left);
     } else {
         y = bstMin(z.right);
         if (y.p !== z) {
-            tree = bstTransplant(tree, y, y.right);
+            tree = bstTransplant(tree,y,y.right);
             y.right = z.right;
             y.right.p = y;
         }
-        tree = bstTransplant(tree, z, y);
+        tree = bstTransplant(tree,z,y);
         y.left = z.left;
         y.left.p = y;
     }
@@ -125,25 +125,19 @@ function bstRemove(tree, node) {
 //     done on nodeX.val
 //   - API/Methods: all binary tree methods plus search, min, max,
 //     remove, and insert.
-function BST(cmpFn) {
+function BST (cmpFn) {
     var self = this,
         // call parent/super constructor
-        api = binaryTree.BinaryTree.call(self, cmpFn);
+        api = binarytree.BinaryTree.call(self, cmpFn);
 
-    api.name = "Binary Search Tree";
+    api.name   = "Binary Search Tree";
 
     self.insertFn = bstInsert;
     self.removeFn = bstRemove;
 
-    api.search = function (val) {
-        return bstSearch(self.root, val, cmpFn);
-    };
-    api.min = function () {
-        return bstMin(self.root);
-    };
-    api.max = function () {
-        return bstMax(self.root);
-    };
+    api.search = function(val)   { return bstSearch(self.root, val, cmpFn); };
+    api.min    = function()      { return bstMin(self.root); };
+    api.max    = function()      { return bstMax(self.root); };
 
     // Return the API functions (public interface)
     return api;

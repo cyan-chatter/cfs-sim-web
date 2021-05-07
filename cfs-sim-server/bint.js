@@ -2,8 +2,8 @@
 
 // Node vs browser behavior
 if (typeof module === 'undefined') {
-    var binaryTree = {},
-        exports = binaryTree;
+    var binarytree = {},
+        exports = binarytree;
 }
 
 // defaultCompareFn: The default compare function.
@@ -11,27 +11,22 @@ if (typeof module === 'undefined') {
 //   0   if node1.val and node2.val are equal
 //   < 0 if node1.val < node2.val
 //   > 0 if node1.val > node2.val
-function defaultCompareFn(node1, node2) {
+function defaultCompareFn (node1, node2) {
     return node1.val - node2.val;
 }
 
 // Statistics tracking.
 var STATS = {};
-
-function GET_STATS() {
+function GET_STATS () {
     return STATS;
 }
-
-function RESET_STATS(vals) {
-    vals = vals || {
-        read: {c: 0, p: 0, l: 0, r: 0, idx: 0, v: 0},
-        write: {c: 0, p: 0, l: 0, r: 0, idx: 0},
-        compare: 0,
-        swap: 0
-    }
+function RESET_STATS (vals) {
+    vals = vals || {read:  {c: 0, p: 0, l: 0, r: 0, idx: 0, v: 0},
+                    write: {c: 0, p: 0, l: 0, r: 0, idx: 0},
+                    compare: 0,
+                    swap: 0}
     STATS = vals;
 }
-
 RESET_STATS();
 
 var NIL;
@@ -53,48 +48,53 @@ function Node(val, opts) {
 
         // Binary tree stored in an array
         arr = opts.arr || null,
-        idx = 0;
+        idx = 0,
+        name = opts.name;
 
     // Common functions/getters/setters. These are wrapped (rather
     // than direct properties) in order to capture statistics about
     // read/write access.
-    this.__defineGetter__('id', function () {
+    this.__defineGetter__('id', function() {
         return id;
     });
-    this.__defineGetter__('isNIL', function () {
+    this.__defineGetter__('isNIL', function() {
         return isNIL;
     });
 
-    this.__defineGetter__('val', function () {
+    this.__defineGetter__('val', function() {
         STATS.read.v++;
         return val;
     });
-    this.__defineSetter__('val', function (arg) {
+    this.__defineSetter__('val', function(arg) {
         throw Error("Cannot set val after insert");
     });
 
-    this.__defineGetter__('color', function () {
+    this.__defineGetter__('color', function() {
         STATS.read.c++;
         return color;
     });
-    this.__defineSetter__('color', function (arg) {
+    this.__defineSetter__('color', function(arg) {
         STATS.write.c++;
         color = arg;
     });
 
-    this.__defineGetter__('idx', function () {
+    this.__defineGetter__('idx', function() {
         STATS.read.idx++;
         return idx;
     });
-    this.__defineSetter__('idx', function (arg) {
+    this.__defineSetter__('idx', function(arg) {
         STATS.write.idx++;
         idx = arg;
+    });
+
+    this.__defineGetter__('name', function() {
+        return name;
     });
 
 
     // Use the compare function we were initialized with to compare
     // ourself with another node.
-    this.cmp = function (other) {
+    this.cmp = function(other) {
         STATS.compare++;
         return cmpFn(this, other);
     }
@@ -102,46 +102,46 @@ function Node(val, opts) {
     // Divergent based on whether we are a normal tree or using
     // indexed arrays for our trees.
     if (arr) {
-        this.__defineGetter__('p', function () {
+        this.__defineGetter__('p', function() {
             STATS.read.p++;
-            var pidx = Math.floor((idx - 1) / 2);
+            var pidx = Math.floor((idx-1)/2);
             if (pidx < 0) {
                 return NIL;
             } else {
                 return arr[pidx];
             }
         });
-        this.__defineSetter__('p', function (arg) {
+        this.__defineSetter__('p', function(arg) {
             throw Error("Cannot set p of array based tree");
         });
 
-        this.__defineGetter__('left', function () {
+        this.__defineGetter__('left', function() {
             STATS.read.l++;
-            var lidx = 2 * idx + 1;
-            if (lidx > arr.length - 1) {
+            var lidx = 2*idx+1;
+            if (lidx > arr.length-1) {
                 return NIL;
             } else {
                 return arr[lidx];
             }
         });
-        this.__defineSetter__('left', function (arg) {
+        this.__defineSetter__('left', function(arg) {
             throw Error("Cannot set left of array based tree");
         });
 
-        this.__defineGetter__('right', function () {
+        this.__defineGetter__('right', function() {
             STATS.read.r++;
-            var ridx = 2 * idx + 2;
-            if (ridx > arr.length - 1) {
+            var ridx = 2*idx+2;
+            if (ridx > arr.length-1) {
                 return NIL;
             } else {
                 return arr[ridx];
             }
         });
-        this.__defineSetter__('right', function (arg) {
+        this.__defineSetter__('right', function(arg) {
             throw Error("Cannot set right of array based tree");
         });
 
-        this.swap = function (arr, other) {
+        this.swap = function(arr, other) {
             STATS.swap++;
             STATS.write.p += 2; // NOTE: not really p, but keep track there
             var nidx = this.idx,
@@ -156,34 +156,34 @@ function Node(val, opts) {
         };
 
     } else {
-        this.__defineGetter__('p', function () {
+        this.__defineGetter__('p', function() {
             STATS.read.p++;
             return p;
         });
-        this.__defineSetter__('p', function (arg) {
+        this.__defineSetter__('p', function(arg) {
             STATS.write.p++;
             p = arg;
         });
 
-        this.__defineGetter__('left', function () {
+        this.__defineGetter__('left', function() {
             STATS.read.l++;
             return left;
         });
-        this.__defineSetter__('left', function (arg) {
+        this.__defineSetter__('left', function(arg) {
             STATS.write.l++;
             left = arg;
         });
 
-        this.__defineGetter__('right', function () {
+        this.__defineGetter__('right', function() {
             STATS.read.r++;
             return right;
         });
-        this.__defineSetter__('right', function (arg) {
+        this.__defineSetter__('right', function(arg) {
             STATS.write.r++;
             right = arg;
         });
 
-        this.swap = function (tree, other) {
+        this.swap = function(tree, other) {
             STATS.swap++;
             var n1 = this, n2 = other;
 
@@ -285,7 +285,6 @@ function Node(val, opts) {
         }
     }
 }
-
 Node.nextId = 0;
 
 // This is the sentinel node that is used instead of null pointers
@@ -295,7 +294,7 @@ NIL = new Node('NIL', {p: NIL, color: 'b'});
 // treeTuple: Return a tuple hierarchy in the form: [val,left,right]
 // (or [val,color,left,right] in the case of Red-Black tree)
 // Note: an empty tree will return 'NIL'
-function treeTuple(tree) {
+function treeTuple (tree) {
     if (tree === NIL) {
         return 'NIL';
     }
@@ -315,21 +314,15 @@ function treeTuple(tree) {
 // result. The action function is called with the current result and
 // the node that is currently being processed.
 // Returns the final reduced result
-function treeReduce(result, node, action, order) {
-    order = order || "in";  // pre, in, or post
+function treeReduce (result, node, action, order) {
+    order = order||"in";  // pre, in, or post
 
     if (node !== NIL) {
-        if (order === 'pre') {
-            result = action(result, node);
-        }
+        if (order === 'pre') { result = action(result, node); }
         result = treeReduce(result, node.left, action, order);
-        if (order === 'in') {
-            result = action(result, node);
-        }
+        if (order === 'in') { result = action(result, node); }
         result = treeReduce(result, node.right, action, order);
-        if (order === 'post') {
-            result = action(result, node);
-        }
+        if (order === 'post') { result = action(result, node); }
     }
     return result;
 }
@@ -340,8 +333,8 @@ function treeReduce(result, node, action, order) {
 //   'pre'  -> pre-order walk
 //   'post' -> post-order walk
 // Based on INORDER-TREE-WALK definition in CLRS 12.1
-function treeWalk(tree, order) {
-    return treeReduce([], tree, function (res, node) {
+function treeWalk (tree, order) {
+    return treeReduce([], tree, function(res, node) {
         return res.concat([node.val]);
     }, order);
 }
@@ -349,14 +342,14 @@ function treeWalk(tree, order) {
 
 // treeLinks: Return a list of links: [[a, b], [b, c]]
 // Note: an empty tree will return null
-function treeLinks(tree) {
-    return treeReduce([], tree, function (res, n) {
+function treeLinks (tree) {
+    return treeReduce([], tree, function(res, n) {
         var links = [];
         if (n.left !== NIL) {
-            links.push([n.id + "." + n.val, n.left.id + "." + n.left.val]);
+            links.push([n.id+"."+n.val, n.left.id+"."+n.left.val]);
         }
         if (n.right !== NIL) {
-            links.push([n.id + "." + n.val, n.right.id + "." + n.right.val]);
+            links.push([n.id+"."+n.val, n.right.id+"."+n.right.val]);
         }
         return res.concat(links);
     }, 'pre');
@@ -371,7 +364,7 @@ function treeDOT(tree) {
     } else {
         dot = "digraph Binary_Search_Tree {\n";
     }
-    treeReduce(null, tree, function (_, n) {
+    treeReduce(null, tree, function(_,n) {
         dot += "  " + n.id + " [label=" + n.val;
         if (n.color === 'r') {
             dot += " color=red];\n";
@@ -396,7 +389,7 @@ function treeDOT(tree) {
 //     a numeric comparison is done on nodeX.val
 //   - API/Methods: walk, reduce. For debug/output: root, tuple,
 //     links, DOT.
-function BinaryTree(cmpFn) {
+function BinaryTree (cmpFn) {
     if (typeof cmpFn === 'undefined') {
         cmpFn = defaultCompareFn;
     }
@@ -409,49 +402,37 @@ function BinaryTree(cmpFn) {
     self.Node = Node;
     self.root = NIL;
     self.size = 0;
-    self.insertFn = function () {
-        throw new Error("No insertFn defined");
-    };
-    self.removeFn = function () {
-        throw new Error("No removeFn defined");
-    };
+    self.insertFn = function() { throw new Error("No insertFn defined"); };
+    self.removeFn = function() { throw new Error("No removeFn defined"); };
 
-    api.root = function () {
-        return self.root;
-    };
-    api.size = function () {
-        return self.size;
-    };
-    api.reduce = function (r, f, o) {
-        return treeReduce(r, self.root, f, o);
-    };
-    api.tuple = function () {
-        return treeTuple(self.root);
-    };
-    api.walk = function (order) {
-        return treeWalk(self.root, order);
-    };
-    api.links = function () {
-        return treeLinks(self.root);
-    };
-    api.DOT = function () {
-        return treeDOT(self.root);
-    };
-    api.remove = function (node) {
+    api.root   = function()      { return self.root; };
+    api.size   = function()      { return self.size; };
+    api.reduce = function(r,f,o) { return treeReduce(r, self.root, f, o); };
+    api.tuple  = function()      { return treeTuple(self.root); };
+    api.walk   = function(order) { return treeWalk(self.root, order); };
+    api.links  = function()      { return treeLinks(self.root); };
+    api.DOT    = function()      { return treeDOT(self.root); };
+    api.remove = function(node)  {
         self.root = self.removeFn(self.root, node);
         self.size--;
     };
-    api.insert = function () {
+    api.insert = function() {
         // Allow one or more values to be inserted
-        if (arguments.length === 1) {
-            var node = new self.Node(arguments[0], {cmpFn: self.cmpFn});
+        if (arguments[0] === 'n') {
+            var node = new self.Node(arguments[1], {name:arguments[2], cmpFn: self.cmpFn});
             self.root = self.insertFn(self.root, node);
             self.size++;
         } else {
-            for (var i = 0; i < arguments.length; i++) {
-                var node = new self.Node(arguments[i], {cmpFn: self.cmpFn});
+            if (arguments.length === 1) {
+                var node = new self.Node(arguments[0], {cmpFn: self.cmpFn});
                 self.root = self.insertFn(self.root, node);
                 self.size++;
+            } else {
+                for (var i = 0; i < arguments.length; i++) {
+                    var node = new self.Node(arguments[i], {cmpFn: self.cmpFn});
+                    self.root = self.insertFn(self.root, node);
+                    self.size++;
+                }
             }
         }
     };

@@ -11,7 +11,7 @@ var response = null
 const schedulerMain = (inputData) => {
     var timeline = scheduler.getTimeline()
     var response = scheduler.runScheduler(inputData, timeline)
-    console.log(chalk.yellowBright(JSON.stringify(response)))
+    //console.log(chalk.yellowBright(JSON.stringify(response)))
     return response
 }
 
@@ -37,30 +37,27 @@ const inputData = {
 //console.log(inputData) 
 response = schedulerMain(inputData)
 
-for(let i of response.resultData){
+// for(let i of response.resultData){
         
-    //time_data
-        for(let j of i.time_data){
+//     //time_data
+//         for(let j of i.time_data){
             
-            for(var key in j.running_task){
-                console.log(chalk.greenBright(key, j.running_task[key]))
-            }
-        }
+//             for(var key in j.running_task){
+//                 console.log(chalk.greenBright(key, j.running_task[key]))
+//             }
+//         }
 
-    //timelineData
-    // for(let j of i.timelineData){
+//     //timelineData
+//     // for(let j of i.timelineData){
         
-    //     for(var key in j){
-    //         console.log(chalk.cyanBright(key, j[key]))
-    //     }
-    // }    
+//     //     for(var key in j){
+//     //         console.log(chalk.cyanBright(key, j[key]))
+//     //     }
+//     // }    
     
-}
+// }
 
     
-
-
-
 
 // app.post('/', function (req, res) {
 //   console.log(req.body)
