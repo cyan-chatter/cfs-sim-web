@@ -7,7 +7,8 @@ const Input = ({copyValuesToRoot}) => {
     
     const [NInput, setNInput] = useState(null)
     const [IInput, setIInput] = useState(null)
-    
+    const [message, setMessage] = useState('')
+
     const [DisabledNInput, setDisabledNInput] = useState(false)
     const [DisabledSubmit, setDisabledSubmit] = useState(true)
 
@@ -28,31 +29,45 @@ const Input = ({copyValuesToRoot}) => {
     }, [IInput])
 
     const onFixNumber = () => {
-        setNInput({n : inputNumber1.current.value, tq : inputNumber2.current.value})
-        setIInput(+(inputNumber1.current.value))
-        setDisabledNInput(true)
+        if(inputNumber1.current.value > 0 && inputNumber2.current.value > 0){
+            setNInput({n : inputNumber1.current.value, tq : inputNumber2.current.value})
+            setIInput(+(inputNumber1.current.value))
+            setMessage('')
+            setDisabledNInput(true)
+        }
+        else setMessage('Only values greater than 0 allowed')
     }
 
     const handleInputChange = (e) => {
-        if(e.target.name === "I1"){
+        
+        if(e.target.name === "I1"){    
             setCurInputs({
                 ...CurInputs,
                 id : e.target.value
             })
         }
         else if(e.target.name === "I2"){
+            if(e.target.value < 0){
+                e.target.value = 0
+            }
             setCurInputs({
                 ...CurInputs,
                 arrival_time : e.target.value
             })
         }
         else if(e.target.name === "I3"){
+            if(e.target.value < 0){
+                e.target.value = 0
+            }
             setCurInputs({
                 ...CurInputs,
                 burst_time : e.target.value
             })
         }
         else if(e.target.name === "I4"){
+            if(e.target.value < 1){
+                e.target.value = 1
+            }
             setCurInputs({
                 ...CurInputs,
                 priority : e.target.value
@@ -92,9 +107,10 @@ const Input = ({copyValuesToRoot}) => {
         <input type="number" className="InputNumber" ref={inputNumber1}  disabled = {DisabledNInput}></input>
         </p>
         <p className="labelInputBinder">
-        <label>Enter Time Quantum</label>
+        <label>Enter Total Time</label>
         <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
         </p>
+        <p>{message != '' ? (message) : null}</p>
         <button className="TempButton" id="Enter" onClick={onFixNumber} disabled = {DisabledNInput}> Enter </button>
         </div>    
         <div className="InputForm"> {IInput > 0 ? createInputForm() : null} </div>
