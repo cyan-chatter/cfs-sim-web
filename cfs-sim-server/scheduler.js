@@ -23,10 +23,12 @@ function saveTimeline(simTree,task,taskId,message){
     //     right : opts.right
     // }
 
-    console.log(chalk.green(simTree),chalk.blue(taskId),chalk.red(message))
-    for(keys in task){
-        console.log(chalk.yellow(keys),chalk.yellow(task[keys]))
-    }
+    //console.log(chalk.green(simTree),chalk.blue(taskId),chalk.red(message))
+
+
+    // for(keys in simTree){
+    //     console.log(chalk.yellow(keys),chalk.yellow(simTree[keys]))
+    // }
     
 }
 
@@ -118,13 +120,13 @@ function runScheduler(tasks, timeline) {
             timeline.remove(min_node);
 
             simTree.remove(simTree.min());
-            var message = "Removing " + running_task.id + " with vruntime " + running_task.vruntime
+            var message = "Removing " + curTask.id + " with vruntime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
                 message += " Updating min_vruntime to " + min_vruntime
             }
-            saveTimeline(simTree,running_task,running_task.id,message)
+            saveTimeline(simTree,curTask,curTask.id,message)
         }
 
         // Update the running_task (if any) by increasing the vruntime
@@ -136,13 +138,13 @@ function runScheduler(tasks, timeline) {
             curTask.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / curTask.priority);
             curTask.truntime++;
             tresults.running_task = curTask;
-            console.log(curTime + ": " + curTask.id);
+            //console.log(curTime + ": " + curTask.id);
             if (curTask.truntime >= curTask.burst_time) {
                 ++tasksCompleted
                 curTask.completed_time = curTime
                 tresults.completed_task = curTask
                 task_done = true; // Set curTask to null later
-                console.log("Completed task:", curTask.id);
+                //console.log("Completed task:", curTask.id);
                 const message = curTask.id + " is over"
                 saveTimeline(simTree,curTask,"-",message)
             }
@@ -150,18 +152,18 @@ function runScheduler(tasks, timeline) {
 
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
         
-        console.log("pure tresults in each iteration ->") 
-        console.log(tresults.running_task)
-        console.log(tresults.completed_task)
-        console.log(tresults.num_tasks)
+        // console.log("pure tresults in each iteration ->") 
+        // console.log(tresults.running_task)
+        // console.log(tresults.completed_task)
+        // console.log(tresults.num_tasks)
         
         results.time_data.push({...tresults})////////////////
         
-        for(let j of results.time_data){
-            for(var key in j.running_task){
-                console.log(chalk.blueBright(key, j.running_task[key]))
-            }
-        }
+        // for(let j of results.time_data){
+        //     for(var key in j.running_task){
+        //         console.log(chalk.blueBright(key, j.running_task[key]))
+        //     }
+        // }
 
         //results.time_data.push({...tresults});
         results.time_data.push({...tresults});
@@ -228,21 +230,21 @@ function runScheduler(tasks, timeline) {
     
 
     const tempRes = new Object({...results});
-    resultData.push(tempRes.time_data)
+    response.resultData.push(tempRes.time_data)
 
     response.node_stats = binaryTree.GET_STATS();
     response.elapsed_ms = (new Date().getTime()) - start_ms;
     
     // console.log("pushed..\n", temp.time_data)
 
-    for(let i of resultData){
-        for(let j of i){
-            // console.log("j -> ", j)
-            for(var key in j.running_task){
-                console.log(key, j.running_task[key])
-            }
-        }
-    }
+    // for(let i of response.resultData){
+    //     for(let j of i){
+    //         // console.log("j -> ", j)
+    //         for(var key in j.running_task){
+    //             console.log(chalk.cyanBright(key, j.running_task[key]))
+    //         }
+    //     }
+    // }
 
     return response
 }
