@@ -11,7 +11,7 @@ const Input = ({copyValuesToRoot}) => {
     const [DisabledNInput, setDisabledNInput] = useState(false)
     const [DisabledSubmit, setDisabledSubmit] = useState(true)
 
-    const [CurInputs,setCurInputs] = useState({id : null, at: null, bt: null, p: null}) 
+    const [CurInputs,setCurInputs] = useState({id : null, arrival_time: null, burst_time: null, priority: null}) 
     const [InputValues, setInputValues] = useState([])
 
     const inputNumber1 = useRef(0)
@@ -43,26 +43,26 @@ const Input = ({copyValuesToRoot}) => {
         else if(e.target.name === "I2"){
             setCurInputs({
                 ...CurInputs,
-                at : e.target.value
+                arrival_time : e.target.value
             })
         }
         else if(e.target.name === "I3"){
             setCurInputs({
                 ...CurInputs,
-                bt : e.target.value
+                burst_time : e.target.value
             })
         }
         else if(e.target.name === "I4"){
             setCurInputs({
                 ...CurInputs,
-                p : e.target.value
+                priority : e.target.value
             })
         }
     }
 
     const handleSubmit = () => {
         setInputValues([...InputValues,CurInputs])
-        setCurInputs({id: null, at: null, bt: null, p: null})
+        setCurInputs({id: null, arrival_time: null, burst_time: null, priority: null})
         setIInput(IInput-1)
     }
 
@@ -75,9 +75,9 @@ const Input = ({copyValuesToRoot}) => {
             return (
                 <tr>
                     <td>{el.id}</td>
-                    <td>{el.at}</td>
-                    <td>{el.bt}</td>
-                    <td>{el.p}</td>
+                    <td>{el.arrival_time}</td>
+                    <td>{el.burst_time}</td>
+                    <td>{el.priority}</td>
                 </tr>
             )
         })

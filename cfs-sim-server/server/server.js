@@ -14,8 +14,6 @@ const schedulerMain = (inputData) => {
 
 app.post('/', function (req, res) {
   
-  var response = null
-  
     const inputData = {
         num_of_tasks : 3,
         total_time : 11,

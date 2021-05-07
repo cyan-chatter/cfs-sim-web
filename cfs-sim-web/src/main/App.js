@@ -7,10 +7,13 @@ import {useWindowSize} from './useWindowSize'
 
 const urlJSON = 'https://gist.githubusercontent.com/cyan-chatter/e5e74c590dd7d2ca5ce713c05d737c0c/raw/185d435de1d4ac08227dedbfd38fe7dd604af137/asiaO.json'
 
+const urlToFetch = 'http://localhost:5500/'
+
 const App = () => {
 
   const [URL,setURL] = useState(null)
   const [InputData, setInputData] = useState(null) 
+  const [PostToServerData, setPostToServerData] = useState(null) 
   const [DisabledSimulate, setDisabledSimulate] = useState(true)
   const treeRef = useRef(null)
 
@@ -20,21 +23,22 @@ const App = () => {
 
   console.log(dimensions)
 
-  const Data = useData(URL,InputData)
+  const Data = useData(URL,PostToServerData)
 
   const onClickToFetchHandler = () => {
     console.log('clicked to fetch')
     if(!DisabledSimulate){
-      setURL(urlJSON)
+      setURL(urlToFetch)
+      setPostToServerData({...InputData})
       setDisabledSimulate(true)
     } 
   }
 
   const copyValuesToRoot = (ph,pd) => {
     const iData = {
-      n : ph.n,
-      tq : ph.tq,
-      pd 
+      num_of_tasks : ph.n,
+      total_time : ph.tq,
+      task_queue : pd 
     }
     setInputData(iData)
     setDisabledSimulate(false)
@@ -45,8 +49,9 @@ const App = () => {
   
   var tree = null
   if(Data){
-    tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
+    //tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
     //tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    console.log(Data)
   }
   
   return (
