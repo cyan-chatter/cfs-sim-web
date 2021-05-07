@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+
 export const useData = (urlData, postData) => {
     const [Data,setData] = useState(null)
     console.log('use data runs')
@@ -6,16 +7,16 @@ export const useData = (urlData, postData) => {
     //need to perform a POST request here with postData
     useEffect(()=>{
 
-
       console.log('use data -> useEffect runs')
       const fetchData = async (url) => {
         console.log('use data -> fetch runs with input: ')
         console.log(postData)    
         try{
+            console.log("Try runs")
+
             const ResponseStream = await fetch(url,{
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
-              mode: 'no-cors', // no-cors, *cors, same-origin
-              cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+              mode: 'cors', // no-cors, *cors, same-origin
               credentials: 'same-origin', // include, *same-origin, omit
               headers: {
                 'Content-Type': 'application/json'
@@ -25,9 +26,8 @@ export const useData = (urlData, postData) => {
               referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
               body: JSON.stringify(postData) // body data type must match "Content-Type" header
             })
-            const d = await ResponseStream.json()       
-            setData(d)
-            console.log('response: ',d)
+            const response = await ResponseStream.json()
+            setData(response)
         }catch(e){
           console.log(e)        
         }

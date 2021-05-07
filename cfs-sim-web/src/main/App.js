@@ -7,7 +7,7 @@ import {useWindowSize} from './useWindowSize'
 
 const urlJSON = 'https://gist.githubusercontent.com/cyan-chatter/e5e74c590dd7d2ca5ce713c05d737c0c/raw/185d435de1d4ac08227dedbfd38fe7dd604af137/asiaO.json'
 
-const urlToFetch = 'http://localhost:5500/'
+const urlToFetch = 'http://localhost:5500/data/'
 
 const App = () => {
 
@@ -20,7 +20,7 @@ const App = () => {
   var dimensions = useWindowSize()
   dimensions.width *= 0.85  //0.7
   dimensions.height *= 0.9
-
+  
   console.log(dimensions)
 
   const Data = useData(URL,PostToServerData)
