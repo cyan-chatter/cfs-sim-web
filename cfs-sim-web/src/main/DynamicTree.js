@@ -1,21 +1,20 @@
 import React, {useRef, useEffect, useState} from 'react'
 import '../design/App.css'
 import '../design/Tree.css'
-
 const d3 = require('d3')
 
-const margin = {
-    top: 20, right: 120, bottom: 20, left: 120      
-}
-
-const curDim = {
-    width : 960 - margin.right - margin.left,
-    height : 600 - margin.top - margin.bottom
-}
-
-var duration = 750
-
 const TreeComponent = ({dimensions,data}) => {
+
+    const margin = {
+        top: 20, right: 120, bottom: 20, left: 120      
+    }
+    
+    const curDim = {
+        width : 960 - margin.right - margin.left,
+        height : 600 - margin.top - margin.bottom
+    }
+    
+    var duration = 750
 
   const svgRef = useRef()
 
@@ -35,8 +34,9 @@ const TreeComponent = ({dimensions,data}) => {
       return a.val.vruntime - b.val.vruntime;
     }
 
-    const curTrees = data.simTrees ////
-    console.log("data in dynamic tree: ", curTrees)
+    const curTrees = data.simTrees 
+    
+    //console.log("data in dynamic tree: ", curTrees)
 
     var nilIdx = 0
     var tree = d3.layout.tree()  /////////////
@@ -88,17 +88,11 @@ const TreeComponent = ({dimensions,data}) => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 
-
-
-
-
     function update(sourceTree) {
       
         console.log("sourceTree: ", sourceTree)
-        var naming = sourceTree.name
-        console.log("name: ", naming)
-        
-        var root = sourceTree.root() ///
+
+        var root = sourceTree.root() 
     
       if (root.val === 'NIL') {  ///////check
           root = {p: {}, val: 'NIL'};
@@ -219,9 +213,8 @@ const TreeComponent = ({dimensions,data}) => {
     for(let i=0; i<curTrees.length; ++i){
         
         setTimeout(()=>{
-            console.log("data passed to this update: ", curTrees[i])
             update(curTrees[i]);
-        },1000)
+        },2000)
     }
     
   }, [dimensions,data])

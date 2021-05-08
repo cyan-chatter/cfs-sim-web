@@ -19,24 +19,7 @@ var response = {
 
 
 function saveTimeline(simTree,task,taskId,message){
-    
-    
-    // var config = {
-    //     color : opts.color,
-    //     p : opts.p,
-    //     left : opts.left,
-    //     right : opts.right
-    // }
-
-    //console.log(chalk.green(simTree),chalk.blue(taskId),chalk.red(message))
-
-
-    // for(keys in simTree){
-    //     console.log(chalk.yellow(keys),chalk.yellow(simTree[keys]))
-    // }
-
     response.simTrees.push(simTree)
-    
 }
 
 // runScheduler: Run scheduler algorithm
