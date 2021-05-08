@@ -87,8 +87,18 @@ const TreeComponent = ({dimensions,data}) => {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+
+
+
+
+
     function update(sourceTree) {
-      var root = sourceTree.root() ///
+      
+        console.log("sourceTree: ", sourceTree)
+        var naming = sourceTree.name
+        console.log("name: ", naming)
+        
+        var root = sourceTree.root() ///
     
       if (root.val === 'NIL') {  ///////check
           root = {p: {}, val: 'NIL'};
@@ -206,11 +216,12 @@ const TreeComponent = ({dimensions,data}) => {
 
     }
 
-    for(var i=0; i<curTrees.length; ++i){
+    for(let i=0; i<curTrees.length; ++i){
         
         setTimeout(()=>{
+            console.log("data passed to this update: ", curTrees[i])
             update(curTrees[i]);
-        },500)
+        },1000)
     }
     
   }, [dimensions,data])

@@ -1,18 +1,13 @@
 import '../design/App.css'
 import React, {useState, useEffect, useRef} from 'react'
-import TreeComponent from './TreeComponent'
 import DynamicTree from './DynamicTree'
 import Input from './Input'
-import {useData} from './useData'
 import {useWindowSize} from './useWindowSize'
-
-const urlJSON = 'https://gist.githubusercontent.com/cyan-chatter/e5e74c590dd7d2ca5ce713c05d737c0c/raw/185d435de1d4ac08227dedbfd38fe7dd604af137/asiaO.json'
-
-const urlToFetch = 'http://localhost:5500/data/'
+import {useScheduler} from '../utils/useScheduler'
 
 const App = () => {
 
-  const [URL,setURL] = useState(null)
+
   const [InputData, setInputData] = useState(null) 
   const [PostToServerData, setPostToServerData] = useState(null) 
   const [DisabledSimulate, setDisabledSimulate] = useState(true)
@@ -24,12 +19,11 @@ const App = () => {
   
   console.log(dimensions)
 
-  const Data = useData(URL,PostToServerData)
+  const Data = useScheduler(PostToServerData)
 
   const onClickToFetchHandler = () => {
     console.log('clicked to fetch')
     if(!DisabledSimulate){
-      setURL(urlToFetch)
       setPostToServerData({...InputData})
       setDisabledSimulate(true)
     } 
@@ -50,9 +44,7 @@ const App = () => {
   
   var tree = null
   if(Data){
-    //tree = (<TreeComponent dimensions= {dimensions} data={Data}/>)
     tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
-    console.log(Data)
   }
   
   return (

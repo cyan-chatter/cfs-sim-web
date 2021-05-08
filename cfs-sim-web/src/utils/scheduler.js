@@ -379,11 +379,10 @@ function getTimeline() {
     return rbt.RBT(vsort);
 }
 
-//----------------------------------------------------------------//
 
+const cfsScheduler = {
+    runScheduler, generateReport, getTimeline
+}
 
-
-exports.runScheduler = runScheduler;
-exports.generateReport = generateReport;
-exports.getTimeline = getTimeline;
+export default cfsScheduler
 

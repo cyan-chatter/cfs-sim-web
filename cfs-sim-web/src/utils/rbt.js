@@ -288,10 +288,23 @@ function RBT(cmpFn) {
     return api;
 }
 
-exports.treeLeftRotate = treeLeftRotate;
-exports.treeRightRotate = treeRightRotate;
-exports.redblackInsertFixup = redblackInsertFixup;
-exports.redblackInsert = redblackInsert;
-exports.redblackRemoveFixup = redblackRemoveFixup;
-exports.redblackRemove = redblackRemove;
-exports.RBT = RBT;
+const _treeLeftRotate = treeLeftRotate
+export { _treeLeftRotate as treeLeftRotate }
+
+const _treeRightRotate = treeRightRotate
+export { _treeRightRotate as treeRightRotate }
+
+const _redblackInsertFixup = redblackInsertFixup
+export { _redblackInsertFixup as redblackInsertFixup }
+
+const _redblackInsert = redblackInsert
+export { _redblackInsert as redblackInsert }
+
+const _redblackRemoveFixup = redblackRemoveFixup
+export { _redblackRemoveFixup as redblackRemoveFixup }
+
+const _redblackRemove = redblackRemove
+export { _redblackRemove as redblackRemove }
+
+const _RBT = RBT
+export { _RBT as RBT }

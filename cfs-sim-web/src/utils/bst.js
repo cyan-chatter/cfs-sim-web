@@ -143,10 +143,26 @@ function BST (cmpFn) {
     return api;
 }
 
-exports.bstSearch = bstSearch;
-exports.bstMin = bstMin;
-exports.bstMax = bstMax;
-exports.bstInsert = bstInsert;
-exports.bstTransplant = bstTransplant;
-exports.bstRemove = bstRemove;
-exports.BST = BST;
+
+const _bstSearch = bstSearch;
+export {_bstSearch as bstSearch};
+
+const _bstMin = bstMin;
+export {_bstMin as bstMin};
+
+const _bstMax = bstMax;
+export {_bstMax as bstMax};
+
+const _bstInsert = bstInsert;
+export {_bstInsert as bstInsert};
+
+const _bstTransplant = bstTransplant;
+export {_bstTransplant as bstTransplant};
+
+const _bstRemove = bstRemove;
+export {_bstRemove as bstRemove};
+
+const _BST = BST;
+export {_BST as BST};
+
+

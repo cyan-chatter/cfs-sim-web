@@ -441,14 +441,35 @@ function BinaryTree (cmpFn) {
     return api;
 }
 
-exports.defaultCompareFn = defaultCompareFn;
-exports.GET_STATS = GET_STATS;
-exports.RESET_STATS = RESET_STATS;
-exports.Node = Node;
-exports.NIL = NIL;
-exports.treeTuple = treeTuple;
-exports.treeReduce = treeReduce;
-exports.treeWalk = treeWalk;
-exports.treeLinks = treeLinks;
-exports.treeDOT = treeDOT;
-exports.BinaryTree = BinaryTree;
+const _defaultCompareFn = defaultCompareFn;
+export { _defaultCompareFn as defaultCompareFn };
+
+const _GET_STATS = GET_STATS;
+export { _GET_STATS as GET_STATS };
+
+const _RESET_STATS = RESET_STATS;
+export { _RESET_STATS as RESET_STATS };
+
+const _Node = Node;
+export { _Node as Node };
+
+const _NIL = NIL;
+export { _NIL as NIL };
+
+const _treeTuple = treeTuple;
+export { _treeTuple as treeTuple };
+
+const _treeReduce = treeReduce;
+export { _treeReduce as treeReduce };
+
+const _treeWalk = treeWalk;
+export { _treeWalk as treeWalk };
+
+const _treeLinks = treeLinks;
+export { _treeLinks as treeLinks };
+
+const _treeDOT = treeDOT;
+export { _treeDOT as treeDOT };
+
+const _BinaryTree = BinaryTree;
+export { _BinaryTree as BinaryTree };
