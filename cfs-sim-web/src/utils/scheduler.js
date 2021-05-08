@@ -156,8 +156,8 @@ function runScheduler(tasks, timeline) {
         //     }
         // }
 
-        //results.time_data.push({...tresults});
-        results.time_data.push({...tresults});
+        
+        
         // if (callback) {
         //     callback(curTime, results);
         // }
@@ -216,8 +216,10 @@ function runScheduler(tasks, timeline) {
     //const tempRes = new Object({...results});
     
 
+    /////////////////////////////////////check
     const tempRes = new Object({...results});
     response.resultData.push(tempRes.time_data)
+    ////////////////////////////////////check
 
     response.node_stats = binaryTree.GET_STATS();
     response.elapsed_ms = (new Date().getTime()) - start_ms;
@@ -362,9 +364,10 @@ function getTimeline() {
     return rbt.RBT(vsort);
 }
 
+var nil = binaryTree.NIL
 
 const cfsScheduler = {
-    runScheduler, generateReport, getTimeline
+    runScheduler, generateReport, getTimeline, nil
 }
 
 export default cfsScheduler

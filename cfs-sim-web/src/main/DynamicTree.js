@@ -39,7 +39,7 @@ const TreeComponent = ({dimensions,data}) => {
     //console.log("data in dynamic tree: ", curTrees)
 
     var nilIdx = 0
-    var tree = d3.layout.tree()  /////////////
+    var tree = d3.layout.tree()  
       .size([curDim.width ,curDim.height])
       .children(function(n) {
         var c = [];
@@ -60,11 +60,7 @@ const TreeComponent = ({dimensions,data}) => {
     })
     .sort(function(a, b) {
         if (a.val !== 'NIL' && b.val !== 'NIL') {
-            //return a.cmp(b);
-            if(typeof(a.val.vruntime) === undefined || typeof(b.val.vruntime) === undefined){
-              return a.val - b.val;
-            }
-            return vsort(a,b);
+            return a.cmp(b);
         } else {
             return -1;
         }
@@ -93,8 +89,9 @@ const TreeComponent = ({dimensions,data}) => {
         console.log("sourceTree: ", sourceTree)
 
         var root = sourceTree.root() 
+        console.log("root: ", root)
     
-      if (root.val === 'NIL') {  ///////check
+      if (root === Response.NIL) {  ///////checked out
           root = {p: {}, val: 'NIL'};
       }
     
@@ -214,7 +211,7 @@ const TreeComponent = ({dimensions,data}) => {
         
         setTimeout(()=>{
             update(curTrees[i]);
-        },2000)
+        },4000)
     }
     
   }, [dimensions,data])
