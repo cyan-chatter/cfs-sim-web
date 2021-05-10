@@ -5,6 +5,10 @@ import Input from './Input'
 import {useWindowSize} from './useWindowSize'
 import {useScheduler} from './useScheduler'
 
+var dimensions = {width : null, height : null}
+dimensions.width = 1228
+dimensions.height = 444
+
 const App = () => {
 
 
@@ -13,11 +17,14 @@ const App = () => {
   const [DisabledSimulate, setDisabledSimulate] = useState(true)
   const treeRef = useRef(null)
 
-  var dimensions = useWindowSize()
-  dimensions.width *= 0.85  //0.7
-  dimensions.height *= 0.9
+  //var dimensions = useWindowSize()
+  //console.log(dimensions)
   
-  console.log(dimensions)
+
+  dimensions.width *= 0.9  //0.7
+  dimensions.height *= 0.8
+  
+  
 
   const Data = useScheduler(PostToServerData)
 

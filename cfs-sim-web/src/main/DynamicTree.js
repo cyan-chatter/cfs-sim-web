@@ -3,6 +3,28 @@ import '../design/App.css'
 import '../design/Tree.css'
 const d3 = require('d3')
 
+// { 
+    //     num_of_tasks : 3,
+    //     total_time : 11,
+    //     task_queue : [
+    //         {id : 'A',
+    //         arrival_time : 1,
+    //         burst_time : 3,
+    //         priority : 2},
+    //         {id : 'B',
+    //         arrival_time : 2,
+    //         burst_time : 4,
+    //         priority : 1},
+    //         {id : 'C',
+    //         arrival_time : 2,
+    //         burst_time : 3,
+    //         priority : 3}
+    //     ]
+    // 
+// }
+
+
+
 const TreeComponent = ({dimensions,data}) => {
 
     const margin = {
@@ -10,8 +32,8 @@ const TreeComponent = ({dimensions,data}) => {
     }
     
     const curDim = {
-        width : 960 - margin.right - margin.left,
-        height : 600 - margin.top - margin.bottom
+        width : dimensions.width - margin.right - margin.left,
+        height : dimensions.height - margin.top - margin.bottom
     }
     
     var duration = 750
@@ -78,8 +100,8 @@ const TreeComponent = ({dimensions,data}) => {
 
     
     const svg = d3.select(svgRef.current)
-    .attr("width", curDim.width + margin.right + margin.left)
-    .attr("height", curDim.height + margin.top + margin.bottom)
+    .attr("width", dimensions.width)
+    .attr("height", dimensions.height)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
@@ -95,8 +117,8 @@ const TreeComponent = ({dimensions,data}) => {
           root = {p: {}, val: 'NIL'};
       }
     
-      root.x0 = curDim.height  / 2; ///
-      root.y0 = 0;
+      root.x0 = dimensions.height / 2 ////
+      root.y0 = 0
     
       // Don't update the read counts while scanning the tree
       //RESET_STATS();
@@ -107,7 +129,7 @@ const TreeComponent = ({dimensions,data}) => {
     
       // Update the nodes…
       var node = svg.selectAll("g.node")
-          .data(nodes, function(d) { return d.id; });
+          .data(nodes, function(d) { console.log("Each data", d); return d.id; });
     
         console.log("node: ", node)///////////////
 
