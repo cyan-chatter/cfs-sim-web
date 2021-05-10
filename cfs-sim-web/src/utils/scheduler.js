@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const _ = require('lodash')
 
 // Node vs browser behavior
 if (typeof module !== 'undefined') {
@@ -19,7 +20,13 @@ var response = {
 
 
 function saveTimeline(simTree,task,taskId,message){
-    if(simTree !== null) response.simTrees.push(simTree)
+    var newObj = null;
+    if(simTree !== null){
+        //newObj = new Object({...simTree}) 
+        newObj = _.cloneDeep(simTree)
+        console.log("new obj: ", newObj)
+        response.simTrees.push(newObj)
+    }
 }
 
 // runScheduler: Run scheduler algorithm
