@@ -3,7 +3,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import DynamicTree from './DynamicTree'
 import Input from './Input'
 import {useWindowSize} from './useWindowSize'
-import {useScheduler} from '../utils/useScheduler'
+import {useScheduler} from './useScheduler'
 
 const App = () => {
 

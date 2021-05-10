@@ -55,7 +55,7 @@ const TreeComponent = ({dimensions,data}) => {
                 c.push(n.right);
             }
         }
-        console.log(n.val, c);
+        console.log(n.val) /////////////
         return c;
     })
     .sort(function(a, b) {
@@ -89,7 +89,7 @@ const TreeComponent = ({dimensions,data}) => {
         console.log("sourceTree: ", sourceTree)
 
         var root = sourceTree.root() 
-        console.log("root: ", root)
+        console.log("root: ", root)///////////////
     
       if (root === Response.NIL) {  ///////checked out
           root = {p: {}, val: 'NIL'};
@@ -109,10 +109,14 @@ const TreeComponent = ({dimensions,data}) => {
       var node = svg.selectAll("g.node")
           .data(nodes, function(d) { return d.id; });
     
+        console.log("node: ", node)///////////////
+
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
           .attr("class", "node")
           .attr("transform", function(d) { return "translate(" + d.p.x + "," + d.p.y + ")"; });
+
+          console.log("nodeEnter: ", nodeEnter)///////////////  
     
       nodeEnter.append("circle")
           .attr("r", 1e-6)
@@ -207,11 +211,16 @@ const TreeComponent = ({dimensions,data}) => {
 
     }
 
+    var timeDelay = 1000, timeIncrement = 2000
+
+
     for(let i=0; i<curTrees.length; ++i){
         
         setTimeout(()=>{
             update(curTrees[i]);
-        },4000)
+        },timeDelay)
+
+        timeDelay += timeIncrement
     }
     
   }, [dimensions,data])
