@@ -19,7 +19,7 @@ var response = {
 
 
 function saveTimeline(simTree,task,taskId,message){
-    response.simTrees.push(simTree)
+    if(simTree !== null) response.simTrees.push(simTree)
 }
 
 // runScheduler: Run scheduler algorithm
@@ -27,7 +27,7 @@ function runScheduler(tasks, timeline) {
 
     
     var simTree = new rbt.RBT()
-    
+    saveTimeline(simTree,null,"-"," ")
     //var resultData = []
 
     // queue of tasks sorted in arrival_time order
@@ -137,7 +137,7 @@ function runScheduler(tasks, timeline) {
                 task_done = true; // Set curTask to null later
                 //console.log("Completed task:", curTask.id);
                 const message = curTask.id + " is over"
-                saveTimeline(simTree,curTask,"-",message)
+                saveTimeline(null,curTask,"-",message)
             }
         }
 
@@ -203,7 +203,7 @@ function runScheduler(tasks, timeline) {
     if (running_task) {
         timeline.insert(running_task)
         const message = running_task.id + " is running"
-        saveTimeline(simTree,running_task.id,message)
+        saveTimeline(null,running_task.id,message)
         //results.timelineData.push({...timeline})----------------timelineData
     }
 

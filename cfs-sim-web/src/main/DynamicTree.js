@@ -127,6 +127,8 @@ const TreeComponent = ({dimensions,data}) => {
       var nodes = tree.nodes(root).reverse()
       var links = tree.links(nodes)
     
+      console.log("nodes", nodes)
+
       // Update the nodes…
       var node = svg.selectAll("g.node")
           .data(nodes, function(d) { console.log("Each data", d); return d.id; });
@@ -136,7 +138,7 @@ const TreeComponent = ({dimensions,data}) => {
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
           .attr("class", "node")
-          .attr("transform", function(d) { return "translate(" + d.p.x + "," + d.p.y + ")"; });
+          .attr("transform", function(d) { console.log("d.p.x:",d.p.x,"d.p.y:",d.p.y); return "translate(" + d.p.x + "," + d.p.y + ")"; });
 
           console.log("nodeEnter: ", nodeEnter)///////////////  
     
@@ -155,7 +157,7 @@ const TreeComponent = ({dimensions,data}) => {
       // Transition nodes to their new position.
       var nodeUpdate = node.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+          .attr("transform", function(d) {console.log("d.p.x:",d.p.x,"d.p.y:",d.p.y); return "translate(" + d.x + "," + d.y + ")"; });
     
       nodeUpdate.select("circle")
           .attr("r", function(n) {
