@@ -25,7 +25,7 @@ const d3 = require('d3')
 
 
 
-const TreeComponent = ({dimensions,data}) => {
+const DynamicTree = ({dimensions,data}) => {
 
     const margin = {
         top: 20, right: 120, bottom: 20, left: 120      
@@ -257,4 +257,4 @@ const TreeComponent = ({dimensions,data}) => {
 
 }
 
-export default TreeComponent
+export default DynamicTree
