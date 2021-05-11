@@ -23,6 +23,7 @@ function saveTimeline(simTree,task,taskId,message){
     var newObj = null;
     if(simTree !== null){
         //newObj = new Object({...simTree}) 
+        console.log("SimTree in Scheduler Save Timeline: ", simTree.size(), simTree.walk())
         newObj = _.cloneDeep(simTree)
         console.log("new obj: ", newObj)
         response.simTrees.push(newObj)
