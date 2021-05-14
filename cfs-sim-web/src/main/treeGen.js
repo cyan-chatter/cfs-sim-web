@@ -2,7 +2,7 @@ var binaryTree = require('../utils/bint'),
         bst = require('../utils/bst'),
         rbt = require('../utils/rbt')
 
-export const genTree = (simTree, tgd) => {
+export const genTree = (simTree, tgd, notifier) => {
     // const newSimTree = {
     //     val, id, message, op, isVal, isId, isM
     // }
@@ -20,7 +20,12 @@ export const genTree = (simTree, tgd) => {
     }
 
 
-    return simTree
+    if(tgd.isM === 1){
+        notifier.message = tgd.message
+    }
 
+    notifier.id = tgd.id
+
+    return simTree
 }
 
