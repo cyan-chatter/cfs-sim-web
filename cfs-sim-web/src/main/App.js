@@ -6,8 +6,8 @@ import {useWindowSize} from './useWindowSize'
 import {useScheduler} from './useScheduler'
 
 var dimensions = {width : null, height : null}
-dimensions.width = 1228
-dimensions.height = 444
+dimensions.width = 800
+dimensions.height = 600
 
 const App = () => {
 
@@ -19,12 +19,7 @@ const App = () => {
 
   //var dimensions = useWindowSize()
   //console.log(dimensions)
-  
-
-  dimensions.width *= 0.9  //0.7
-  dimensions.height *= 0.8
-  
-  
+    
 
   const Data = useScheduler(PostToServerData)
 
@@ -51,8 +46,8 @@ const App = () => {
   
   var tree = null
   if(Data){
-    //tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
-    tree=(<p>Data collected</p>)
+    tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    //tree=(<p>Data collected</p>)
   }
   
   return (

@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react'
 import '../design/App.css'
 import '../design/Tree.css'
+import {genTree} from './treeGen'
 const d3 = require('d3')
 
 // { 
@@ -55,8 +56,6 @@ const DynamicTree = ({dimensions,data}) => {
     function vsort(a,b) {
       return a.val.vruntime - b.val.vruntime;
     }
-
-    const curTrees = data.simTrees 
     
     //console.log("data in dynamic tree: ", curTrees)
 
@@ -138,7 +137,7 @@ const DynamicTree = ({dimensions,data}) => {
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
           .attr("class", "node")
-          .attr("transform", function(d) { console.log("d.p.x:",d.p.x,"d.p.y:",d.p.y); return "translate(" + d.p.x + "," + d.p.y + ")"; });
+          .attr("transform", function(d) { console.log("d.p.x:",d.p.x,"d.p.y:",d.p.y); return "translate(" + d.x + "," + d.y + ")"; }) ////////////////check
 
           console.log("nodeEnter: ", nodeEnter)///////////////  
     
@@ -176,7 +175,7 @@ const DynamicTree = ({dimensions,data}) => {
       // Transition exiting nodes to the parent's new position.
       var nodeExit = node.exit().transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + d.p.x + "," + d.p.y + ")"; })
+          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })////////////////////check
           .remove();
     
       nodeExit.select("circle")
@@ -236,12 +235,13 @@ const DynamicTree = ({dimensions,data}) => {
     }
 
     var timeDelay = 1000, timeIncrement = 2000
+    var curTree; 
 
-
-    for(let i=0; i<curTrees.length; ++i){
+    for(let i=0; i<data.simData.length; ++i){
         
         setTimeout(()=>{
-            update(curTrees[i]);
+            curTree = genTree(curTree,data.simData[i])
+            update(curTree)
         },timeDelay)
 
         timeDelay += timeIncrement
