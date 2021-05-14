@@ -22,11 +22,7 @@ export const useScheduler = (inputData) => {
     //         console.log("Response.resultData.element-> ")
     //         console.log(i)
     //     }
-    
-    for(let simTree of Response.simTrees){
-        console.log("Each Response Tree: ")      
-        console.log(simTree.walk())
-    }
+    console.log("Response.simData: ", Response.simData)
  }
     
     

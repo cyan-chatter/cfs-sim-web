@@ -51,7 +51,8 @@ const App = () => {
   
   var tree = null
   if(Data){
-    tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    //tree = (<DynamicTree dimensions= {dimensions} data={Data}/>)
+    tree=(<p>Data collected</p>)
   }
   
   return (

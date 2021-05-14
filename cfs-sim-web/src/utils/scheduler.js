@@ -15,27 +15,22 @@ var response = {
     resultData : [],
     node_stats : null,
     elapsed_ms : null,
-    simTrees : []
+    simData : []
 }
 
 
-function saveTimeline(simTree,task,taskId,message){
-    let newObj = null;
-    if(simTree !== null){
-        //newObj = _.cloneDeep(simTree)
-        newObj = new Object({...simTree}) 
-        console.log("SimTree in Scheduler Save Timeline: ", simTree.walk())
-        console.log("new obj: ", newObj.walk())
-        response.simTrees.push(newObj)
+function saveTimeline(val, id, message, op, isVal, isId, isM){
+    const newSimTree = {
+        val, id, message, op, isVal, isId, isM
     }
+    response.simData.push(newSimTree)
 }
 
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
 
-    
-    var simTree = new rbt.RBT()
-    saveTimeline(simTree,null,"-"," ")
+    //var simTree = new rbt.RBT()
+    saveTimeline(-1,"-","","s",0,0,0)
     //var resultData = []
 
     // queue of tasks sorted in arrival_time order
@@ -87,10 +82,8 @@ function runScheduler(tasks, timeline) {
             new_task.truntime = 0;
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
-            
-            simTree.insert('n', new_task.vruntime, new_task.id)
             const message = "Adding " + new_task.id + " with vruntime " + new_task.vruntime
-            saveTimeline(simTree,new_task,new_task.id,message)
+            saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1)
             //results.timelineData.push({...timeline})----------------timelineData
         }
 
@@ -100,12 +93,10 @@ function runScheduler(tasks, timeline) {
         // added back to the timeline.
         if (curTask && (curTask.vruntime > min_vruntime)) {
             timeline.insert(curTask)
-            
-            simTree.insert('n', curTask.vruntime, curTask.id)
             const message = "Inserting " + curTask.id + " with vruntime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
+            saveTimeline(curTask.vruntime,curTask.id,message,'i',1,1,1)
             curTask = null
-            saveTimeline(simTree,curTask,"-",message)
         }
 
         // If there is no running task (which may happen right after
@@ -117,15 +108,14 @@ function runScheduler(tasks, timeline) {
             var min_node = timeline.min();
             curTask = min_node.val;
             timeline.remove(min_node);
-
-            simTree.remove(simTree.min());
+            //simTree.remove(simTree.min());
             var message = "Removing " + curTask.id + " with vruntime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
                 message += " Updating min_vruntime to " + min_vruntime
             }
-            saveTimeline(simTree,curTask,curTask.id,message)
+            saveTimeline(-1,curTask.id,message,"r",0,1,1)
         }
 
         // Update the running_task (if any) by increasing the vruntime
@@ -142,10 +132,10 @@ function runScheduler(tasks, timeline) {
                 ++tasksCompleted
                 curTask.completed_time = curTime
                 tresults.completed_task = curTask
-                task_done = true; // Set curTask to null later
+                task_done = true // Set curTask to null later
                 //console.log("Completed task:", curTask.id);
                 const message = curTask.id + " is over"
-                saveTimeline(null,curTask,"-",message)
+                saveTimeline(-1,"-",message,"n",0,0,1)
             }
         }
 
@@ -211,7 +201,7 @@ function runScheduler(tasks, timeline) {
     if (running_task) {
         timeline.insert(running_task)
         const message = running_task.id + " is running"
-        saveTimeline(null,running_task.id,message)
+        saveTimeline(-1,running_task.id,message,"n",0,1,1)
         //results.timelineData.push({...timeline})----------------timelineData
     }
 
@@ -368,8 +358,7 @@ function getTimeline() {
     function vsort(a, b) {
         return a.val.vruntime - b.val.vruntime;
     }
-
-    return rbt.RBT(vsort);
+    return rbt.RBT(vsort)
 }
 
 var nil = binaryTree.NIL
