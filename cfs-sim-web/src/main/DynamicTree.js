@@ -38,6 +38,8 @@ const DynamicTree = ({dimensions,data}) => {
     var duration = 750
 
   const svgRef = useRef()
+  const messageRef = useRef()
+  const taskIdRef = useRef()
 
   useEffect(() => {
   
@@ -232,6 +234,11 @@ const DynamicTree = ({dimensions,data}) => {
 
     }
 
+    const updateTaskMessages = (notifier) => {
+        messageRef.current.innerHTML = notifier.message
+        taskIdRef.current.innerHTML = notifier.id
+    }
+
     var timeDelay = 1000, timeIncrement = 2000
     var curTree,notifier={
         id: null,
@@ -244,6 +251,7 @@ const DynamicTree = ({dimensions,data}) => {
             curTree = genTree(curTree,data.simData[i],notifier)
             console.log("message: ", notifier.message)
             console.log("id: ", notifier.id)
+            updateTaskMessages(notifier)
             update(curTree)
         },timeDelay)
 
@@ -253,9 +261,15 @@ const DynamicTree = ({dimensions,data}) => {
   }, [dimensions,data])
 
   return (
-    <>
+    <div className="simMain">
         <svg className="svg" ref= {svgRef}></svg>
-    </>    
+        <div className="taskData">
+        <label>Current Task</label>   
+        <p className="taskId" ref= {taskIdRef}></p>
+        <label>Current Operation</label>   
+        <p className="message" ref= {messageRef}></p>
+        </div>
+    </div>    
   )
 
 }

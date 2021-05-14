@@ -127,11 +127,6 @@
    font-size: 1.5em;
  }
 
- 
  .Tree{
-    border: 3px solid black;
-    min-height: 100vh;
-    min-width: 80vw;
-    height : 100vh;
-    width : 80vw;
+    font-family: cursive;
  }
