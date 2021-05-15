@@ -28,6 +28,23 @@ function saveTimeline(val, id, message, op, isVal, isId, isM, start_ms){
     response.syncTime.push(et)
 }
 
+var prioritySum = 0;
+
+function updateSlices(tasks, period, curTime) {
+    console.log("Updating Slices");
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].arrival_time > curTime) {
+            break;
+        }
+        if (tasks[i].truntime >= tasks[i].burst_time) {
+            continue;
+        }
+        tasks[i].slice = (tasks[i].priority * period) / prioritySum; // divide by 1000 to convert to ms
+        console.log("period = " + period + " priority_sum = " + prioritySum);
+        console.log("Task " + tasks[i].id + " has slice = " + tasks[i].slice);
+    }
+}
+
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
 
@@ -39,6 +56,7 @@ function runScheduler(tasks, timeline) {
     //var resultData = []
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
+    for (var x = 0; x < time_queue.length; x++) prioritySum += time_queue[x].priority;
     // index into time_queue of the next nearest task to start
     var time_queue_idx = 0;
 
@@ -53,6 +71,12 @@ function runScheduler(tasks, timeline) {
 
     // Loop from time/tick 0 through the total time/ticks specified
     var running_task = null;
+
+    // Min time process can run before preemption
+    const min_granularity = 1.25;
+
+    // Period in which all tasks are scheduled at least once
+    const latency = 10.25;
 
 
     //let results = []
@@ -78,23 +102,26 @@ function runScheduler(tasks, timeline) {
         // the timeline structure when the arrival_time for those tasks
         // has arrived.
         while (time_queue_idx < time_queue.length && curTime >= time_queue[time_queue_idx].arrival_time) {
-            var new_task = {...time_queue[time_queue_idx++]};
+            var new_task = time_queue[time_queue_idx++];
             // new tasks get their vruntime set to the current
             // min_vruntime
             new_task.vruntime = min_vruntime;
             new_task.truntime = 0;
+            new_task.this_slice = 0;
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
             const message = "Adding " + new_task.id + " with vruntime " + new_task.vruntime
             saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1,start_ms)
             //results.timelineData.push({...timeline})----------------timelineData
         }
+        updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
 
         // If there is a task running and its vruntime exceeds
         // min_vruntime then add it back to the timeline. Since
         // vruntime is greater it won't change min_vruntime when it's
         // added back to the timeline.
-        if (curTask && (curTask.vruntime > min_vruntime)) {
+        if (curTask && (curTask.vruntime > min_vruntime) && (curTask.this_slice > curTask.slice)
+            && (curTask.this_slice > min_granularity)) {
             timeline.insert(curTask)
             const message = "Inserting " + curTask.id + " with vruntime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
@@ -110,6 +137,7 @@ function runScheduler(tasks, timeline) {
         if (!curTask && timeline.size() > 0) {
             var min_node = timeline.min();
             curTask = min_node.val;
+            curTask.this_slice = 0;
             timeline.remove(min_node);
             //simTree.remove(simTree.min());
             var message = "Removing " + curTask.id + " with vruntime " + curTask.vruntime
@@ -127,14 +155,16 @@ function runScheduler(tasks, timeline) {
         // to null.
         var task_done = false;
         if (curTask) {
-            curTask.vruntime += Math.max(1, (time_queue.length - tasksCompleted) / curTask.priority);
+            curTask.vruntime += prioritySum / curTask.priority;
             curTask.truntime++;
+            curTask.this_slice++;
             tresults.running_task = curTask;
             //console.log(curTime + ": " + curTask.id);
             if (curTask.truntime >= curTask.burst_time) {
                 ++tasksCompleted
                 curTask.completed_time = curTime
                 tresults.completed_task = curTask
+                prioritySum -= curTask.priority
                 task_done = true // Set curTask to null later
                 //console.log("Completed task:", curTask.id);
                 const message = curTask.id + " is over"
