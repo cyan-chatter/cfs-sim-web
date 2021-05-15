@@ -35,9 +35,8 @@ function runScheduler(tasks, timeline) {
     var start_ms = new Date().getTime();
     binaryTree.RESET_STATS();
     
-    saveTimeline(-1,"-","","s",0,0,0,start_ms)
+    saveTimeline(-1,"-","Scheduler begins the operations","s",0,0,1,start_ms)
     //var resultData = []
-    saveTimeline(-1,"-","Scheduler Operations are Over","n",0,0,1,start_ms)
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
@@ -213,29 +212,13 @@ function runScheduler(tasks, timeline) {
     response.elapsed_ms = (new Date().getTime()) - start_ms 
 
     //binaryTree.RESET_STATS();
-    //results.node_stats = binaryTree.GET_STATS();
-    //results.elapsed_ms = (new Date().getTime()) - start_ms;
-    //const tempRes = new Object({...results});
-    
 
     /////////////////////////////////////check
     const tempRes = new Object({...results});
     response.resultData.push(tempRes.time_data)
     ////////////////////////////////////check
 
-    response.node_stats = binaryTree.GET_STATS();
-    response.elapsed_ms = (new Date().getTime()) - start_ms;
-    
-    // console.log("pushed..\n", temp.time_data)
-
-    // for(let i of response.resultData){
-    //     for(let j of i){
-    //         // console.log("j -> ", j)
-    //         for(var key in j.running_task){
-    //             console.log(chalk.cyanBright(key, j.running_task[key]))
-    //         }
-    //     }
-    // }
+    saveTimeline(-1,"-","Scheduler operations are over","n",0,0,1,start_ms)
 
     return response
 }
