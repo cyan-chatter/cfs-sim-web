@@ -69,7 +69,8 @@ function runScheduler(tasks, timeline) {
         // Results data for this time unit/tick
         let tresults = {
             running_task: null,
-            completed_task: null
+            completed_task: null,
+            elapsedTime : null
         };
 
     
@@ -115,7 +116,7 @@ function runScheduler(tasks, timeline) {
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
-                message += " Updating min_vruntime to " + min_vruntime
+                message += "    Updating min_vruntime to " + min_vruntime
             }
             saveTimeline(-1,curTask.id,message,"r",0,1,1,start_ms)
         }
@@ -142,11 +143,7 @@ function runScheduler(tasks, timeline) {
         }
 
         tresults.num_tasks = timeline.size() + (running_task ? 1 : 0);
-        
-        // console.log("pure tresults in each iteration ->") 
-        // console.log(tresults.running_task)
-        // console.log(tresults.completed_task)
-        // console.log(tresults.num_tasks)
+        tresults.elapsedTime = (new Date().getTime()) - start_ms     
         
         response.resultData.push({...tresults})
         

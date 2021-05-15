@@ -40,6 +40,8 @@ const DynamicTree = ({dimensions,data}) => {
   const svgRef = useRef()
   const messageRef = useRef()
   const taskIdRef = useRef()
+  const tasksRunLogRef = useRef()
+  const operationLogRef = useRef()
 
   useEffect(() => {
   
@@ -76,7 +78,6 @@ const DynamicTree = ({dimensions,data}) => {
                 c.push(n.right);
             }
         }
-        console.log(n.val) /////////////
         return c;
     })
     .sort(function(a, b) {
@@ -86,13 +87,6 @@ const DynamicTree = ({dimensions,data}) => {
             return -1;
         }
     })
-
-    //root = d3.hierarchy(treeData, function(d) { return d.children; });
-
-    // const linkPathGen = d3.linkVertical()
-    // .source(link=>link.source)
-    // .target(link=>link.target)
-    // .x(node=>node.x).y(node=>node.y)
 
     var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.x, d.y]; });
@@ -107,7 +101,6 @@ const DynamicTree = ({dimensions,data}) => {
     
     function update(sourceTree) {
       
-
       var root = sourceTree.root() 
       if (root === Response.NIL) {  
           root = {p: {}, val: 'NIL'}
@@ -231,8 +224,16 @@ const DynamicTree = ({dimensions,data}) => {
 
     }
 
+    const updateOperationLog = (m) => {
+        const li = document.createElement('li')
+        li.className = 'reportLine'
+        li.innerHTML = m
+        operationLogRef.current.appendChild(li)
+    }
+
     const updateTaskMessages = (notifier) => {
         messageRef.current.innerHTML = notifier.message
+        updateOperationLog(notifier.message)
         taskIdRef.current.innerHTML = notifier.id
     }
 
@@ -242,18 +243,59 @@ const DynamicTree = ({dimensions,data}) => {
         message: null
     }
 
+    const updateTasksRanAtEachTickLog = () => {
+        
+        for(let i=0; i<data.resultData.length; ++i){
+            let li = document.createElement('div')
+            li.className = 'reportLine'
+            
+            const et = document.createElement('p')
+            et.className = 'elapsedTime'
+            et.innerHTML = 'After ' + data.resultData[i].elapsedTime + ' ms :'
+            li.appendChild(et)
+
+            let eT;
+            
+            if(data.resultData[i].running_task !== null){
+                eT = document.createElement('p')
+                eT.className = 'elapsedTask'
+                eT.innerHTML = `Running Task: ${data.resultData[i].running_task.id} -> Virtual Runtime: ${data.resultData[i].running_task.vruntime}` 
+                li.appendChild(eT)
+            }else{
+                eT = document.createElement('p')
+                eT.className = 'elapsedTask'
+                eT.innerHTML = `No Task Ran at this Clock Tick` 
+                li.appendChild(eT)
+            }
+
+            if(data.resultData[i].completed_task !== null){
+                eT = document.createElement('p')
+                eT.className = 'elapsedTask'
+                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} -> Virtual Runtime: ${data.resultData[i].completed_task.vruntime}` 
+                li.appendChild(eT)
+            }
+            
+            tasksRunLogRef.current.appendChild(li)
+        }
+
+    }
+
     for(let i=0; i<data.simData.length; ++i){
         
         setTimeout(()=>{
             curTree = genTree(curTree,data.simData[i],notifier)
             update(curTree)
             updateTaskMessages(notifier)
+            if(i === data.simData.length - 1){
+                updateTasksRanAtEachTickLog()
+            }
         },timeDelay)
 
         if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
             syncTimeIncrement = (data.syncTime[i] - data.syncTime[i-1])*1000
         }
         timeDelay += (timeIncrement + syncTimeIncrement)
+        
     }
     
   }, [dimensions,data])
@@ -266,6 +308,12 @@ const DynamicTree = ({dimensions,data}) => {
         <p className="taskId" ref= {taskIdRef}></p>
         <label>Current Operation:</label>   
         <p className="message" ref= {messageRef}></p>
+        <div className="reports">
+            <label>Operations Log:</label>   
+            <ol className="operationLog" ref= {operationLogRef}></ol>
+            <label>Tasks Ran at Each Clock Tick:</label>
+            <div className="tasksRunLog" ref = {tasksRunLogRef}></div>
+        </div>
         </div>
     </div>    
   )
