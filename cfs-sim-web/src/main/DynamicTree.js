@@ -239,7 +239,7 @@ const DynamicTree = ({dimensions,data}) => {
         taskIdRef.current.innerHTML = notifier.id
     }
 
-    var timeDelay = 1000, timeIncrement = 2000
+    var timeDelay = 300, timeIncrement = 2000, syncTimeIncrement = 0
     var curTree,notifier={
         id: null,
         message: null
@@ -253,7 +253,10 @@ const DynamicTree = ({dimensions,data}) => {
             update(curTree)
         },timeDelay)
 
-        timeDelay += timeIncrement
+        if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
+            syncTimeIncrement = (data.syncTime[i] - data.syncTime[i-1])*1000
+        }
+        timeDelay += (timeIncrement + syncTimeIncrement)
     }
     
   }, [dimensions,data])

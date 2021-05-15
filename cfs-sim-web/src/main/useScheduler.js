@@ -22,12 +22,15 @@ export const useScheduler = (inputData) => {
     //         console.log("Response.resultData.element-> ")
     //         console.log(i)
     //     }
+    console.log("Response.resultData: ", Response.resultData)
+    console.log("Response.syncTime: ",Response.syncTime)
     console.log("Response.simData: ", Response.simData)
+    console.log("Response.elapsed_ms: ", Response.elapsed_ms)
  }
     
     
     //e.color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')
-    //console.log("Response: ", Response)
+    
     return Response
 }
 

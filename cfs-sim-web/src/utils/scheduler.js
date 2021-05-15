@@ -37,7 +37,7 @@ function runScheduler(tasks, timeline) {
     
     saveTimeline(-1,"-","","s",0,0,0,start_ms)
     //var resultData = []
-
+    saveTimeline(-1,"-","Scheduler Operations are Over","n",0,0,1,start_ms)
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
     // index into time_queue of the next nearest task to start
