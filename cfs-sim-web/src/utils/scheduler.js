@@ -15,22 +15,27 @@ var response = {
     resultData : [],
     node_stats : null,
     elapsed_ms : null,
+    syncTime : [],
     simData : []
 }
 
-
-function saveTimeline(val, id, message, op, isVal, isId, isM){
+function saveTimeline(val, id, message, op, isVal, isId, isM, start_ms){
     const newSimTree = {
         val, id, message, op, isVal, isId, isM
     }
+    const et = (new Date().getTime()) - start_ms 
     response.simData.push(newSimTree)
+    response.syncTime.push(et)
 }
 
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
 
     //var simTree = new rbt.RBT()
-    saveTimeline(-1,"-","","s",0,0,0)
+    var start_ms = new Date().getTime();
+    binaryTree.RESET_STATS();
+    
+    saveTimeline(-1,"-","","s",0,0,0,start_ms)
     //var resultData = []
 
     // queue of tasks sorted in arrival_time order
@@ -45,8 +50,7 @@ function runScheduler(tasks, timeline) {
     // current running task or null if no tasks are running.
     // Initialize statistics gathering
 
-    var start_ms = new Date().getTime();
-    binaryTree.RESET_STATS();
+    
     var tasksCompleted = 0
 
     var results = {time_data: [], timelineData: []}
@@ -83,7 +87,7 @@ function runScheduler(tasks, timeline) {
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
             const message = "Adding " + new_task.id + " with vruntime " + new_task.vruntime
-            saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1)
+            saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1,start_ms)
             //results.timelineData.push({...timeline})----------------timelineData
         }
 
@@ -95,7 +99,7 @@ function runScheduler(tasks, timeline) {
             timeline.insert(curTask)
             const message = "Inserting " + curTask.id + " with vruntime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
-            saveTimeline(curTask.vruntime,curTask.id,message,'i',1,1,1)
+            saveTimeline(curTask.vruntime,curTask.id,message,'i',1,1,1,start_ms)
             curTask = null
         }
 
@@ -115,7 +119,7 @@ function runScheduler(tasks, timeline) {
                 min_vruntime = timeline.min().val.vruntime
                 message += " Updating min_vruntime to " + min_vruntime
             }
-            saveTimeline(-1,curTask.id,message,"r",0,1,1)
+            saveTimeline(-1,curTask.id,message,"r",0,1,1,start_ms)
         }
 
         // Update the running_task (if any) by increasing the vruntime
@@ -135,7 +139,7 @@ function runScheduler(tasks, timeline) {
                 task_done = true // Set curTask to null later
                 //console.log("Completed task:", curTask.id);
                 const message = curTask.id + " is over"
-                saveTimeline(-1,"-",message,"n",0,0,1)
+                saveTimeline(-1,"-",message,"n",0,0,1,start_ms)
             }
         }
 
@@ -201,7 +205,7 @@ function runScheduler(tasks, timeline) {
     if (running_task) {
         timeline.insert(running_task)
         const message = running_task.id + " is running"
-        saveTimeline(-1,running_task.id,message,"n",0,1,1)
+        saveTimeline(-1,running_task.id,message,"n",0,1,1,start_ms)
         //results.timelineData.push({...timeline})----------------timelineData
     }
 
