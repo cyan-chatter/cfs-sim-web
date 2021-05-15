@@ -174,14 +174,16 @@ const DynamicTree = ({dimensions,data}) => {
     
       link.enter().insert("path", "g")
           .attr("class", "link")
-          .style("stroke", "black")
-          .style("stroke-width", 2)
+          //.style("stroke", "black")
+          //.style("stroke-width", 2)
           .attr("d", function(d) {
             var o = {x: d.source.x, y: d.source.y}
             return diagonal({source: o, target: o});
           })
     
       link
+        .style("stroke", "black")
+        .style("stroke-width", 2)
         .attr("stroke-dasharray",function(){
                 const length = this.getTotalLength()
                 return length + " " + length
@@ -192,23 +194,14 @@ const DynamicTree = ({dimensions,data}) => {
         })
         .transition()
         .duration(duration)
-        .delay(linkObj => linkObj.source.depth * 2000)
+        .delay(linkObj => linkObj.source.depth * 500)
         .attr("stroke-dashoffset", 0)
         .style("fill","none")
         .attr("d", diagonal)
     
       link.exit()
-        .attr("stroke-dasharray",function(){
-        const length = this.getTotalLength()
-        return length + " " + length
-        })
-        .attr("stroke-dashoffset",function(){
-        const length = this.getTotalLength()
-        return length
-        })
           .transition()
           .duration(duration)
-          .attr("stroke-dashoffset", 0)
           .attr("d", function(d) {
             var o = {x: d.source.x, y: d.source.y}
             return diagonal({source: o, target: o})
