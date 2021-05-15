@@ -49,13 +49,13 @@ function runScheduler(tasks, timeline) {
     // current running task or null if no tasks are running.
     // Initialize statistics gathering
 
-    
     var tasksCompleted = 0
-
-    var results = {time_data: [], timelineData: []}
 
     // Loop from time/tick 0 through the total time/ticks specified
     var running_task = null;
+
+
+    //let results = []
 
     // Loop from time/tick 0 through the total time/ticks specified
     for (var curTime = 0; curTime < tasks.total_time; curTime++) {
@@ -67,13 +67,12 @@ function runScheduler(tasks, timeline) {
         }
 
         // Results data for this time unit/tick
-        var tresults = {
+        let tresults = {
             running_task: null,
             completed_task: null
         };
 
-        
-
+    
         // Check tasks at the beginning of the task queue. Add any to
         // the timeline structure when the arrival_time for those tasks
         // has arrived.
@@ -149,7 +148,7 @@ function runScheduler(tasks, timeline) {
         // console.log(tresults.completed_task)
         // console.log(tresults.num_tasks)
         
-        results.time_data.push({...tresults})////////////////
+        response.resultData.push({...tresults})
         
         // for(let j of results.time_data){
         //     for(var key in j.running_task){
@@ -163,8 +162,9 @@ function runScheduler(tasks, timeline) {
         //     callback(curTime, results);
         // }
 
-        const tempRes = new Object({...results});
-        response.resultData.push(tempRes.time_data)
+        // const tempRes = new Object({...results});
+        // response.resultData.push(tempRes)
+
         // console.log("pushed..\n", tempRes.timelineData)
         // for(let i of tempRes.timelineData){
         //     for(var key in i){
@@ -214,8 +214,8 @@ function runScheduler(tasks, timeline) {
     //binaryTree.RESET_STATS();
 
     /////////////////////////////////////check
-    const tempRes = new Object({...results});
-    response.resultData.push(tempRes.time_data)
+    // const tempRes = new Object({...results});
+    // response.resultData.push(tempRes)
     ////////////////////////////////////check
 
     saveTimeline(-1,"-","Scheduler operations are over","n",0,0,1,start_ms)
@@ -240,8 +240,8 @@ function generateSummary(tasks, timeline, results) {
 
     //results.timelineData.push({...timeline})----------------timelineData
 
-    for (var i = 0; i < results.time_data.length; i++) {
-        var t = results.time_data[i];
+    for (var i = 0; i < results.length; i++) {
+        var t = results[i];
         hvals.push(t.running_task ? t.running_task.id : "_");
     }
     out += "Timeline: ";
@@ -286,8 +286,8 @@ function generateReport(tasks, timeline, results, mode) {
     if (mode === 'detailed') {
         out += "\ntime [tasks]: running_task, completed?\n";
     }
-    for (var i = 0; i < results.time_data.length; i++) {
-        var t = results.time_data[i],
+    for (var i = 0; i < results.length; i++) {
+        var t = results[i],
             msg = "  " + i + " [" + t.num_tasks + "]: ";
         if (t.running_task) {
             msg += t.running_task.id;
@@ -302,41 +302,41 @@ function generateReport(tasks, timeline, results, mode) {
     }
 
     // Sum all the reads and writes
-    for (var r in results.node_stats.read) {
-        reads += results.node_stats.read[r];
-    }
-    for (var r in results.node_stats.write) {
-        writes += results.node_stats.write[r];
-    }
-    total = reads + writes;
+    // for (var r in results.node_stats.read) {
+    //     reads += results.node_stats.read[r];
+    // }
+    // for (var r in results.node_stats.write) {
+    //     writes += results.node_stats.write[r];
+    // }
+    // total = reads + writes;
 
-    if (mode === 'csv') {
-        // Report summary statistics
-        // header is printed by caller
-        out += tasks.num_of_tasks + ",";
-        out += tasks.total_time + ",";
-        out += completed + ",";
+    // if (mode === 'csv') {
+    //     // Report summary statistics
+    //     // header is printed by caller
+    //     out += tasks.num_of_tasks + ",";
+    //     out += tasks.total_time + ",";
+    //     out += completed + ",";
 
-        out += results.elapsed_ms + ",";
-        out += reads + ",";
-        out += writes + ",";
-        out += total + ",";
-        out += (completed / results.elapsed_ms) + ",";
-        out += (completed / total);
-    } else {
-        // Report summary statistics
-        out += "Total Tasks: " + tasks.num_of_tasks + "\n";
-        out += "Total Time: " + tasks.total_time + "\n";
-        out += "Completed Tasks: " + completed + "\n";
+    //     out += results.elapsed_ms + ",";
+    //     out += reads + ",";
+    //     out += writes + ",";
+    //     out += total + ",";
+    //     out += (completed / results.elapsed_ms) + ",";
+    //     out += (completed / total);
+    // } else {
+    //     // Report summary statistics
+    //     out += "Total Tasks: " + tasks.num_of_tasks + "\n";
+    //     out += "Total Time: " + tasks.total_time + "\n";
+    //     out += "Completed Tasks: " + completed + "\n";
 
-        out += "Wallclock elapsed time: " + results.elapsed_ms + "ms\n";
-        out += "Node operations reads  : " + reads + "\n";
-        out += "                writes : " + writes + "\n";
-        out += "                total  : " + total + "\n";
-        out += "Throughput: " + (completed / results.elapsed_ms) + " completed tasks/ms\n";
-        out += "            " + (completed / total) + " completed tasks/operation\n";
-        //console.log("Tasks per tick:", tasks_per_tick);
-    }
+    //     out += "Wallclock elapsed time: " + results.elapsed_ms + "ms\n";
+    //     out += "Node operations reads  : " + reads + "\n";
+    //     out += "                writes : " + writes + "\n";
+    //     out += "                total  : " + total + "\n";
+    //     out += "Throughput: " + (completed / results.elapsed_ms) + " completed tasks/ms\n";
+    //     out += "            " + (completed / total) + " completed tasks/operation\n";
+    //     //console.log("Tasks per tick:", tasks_per_tick);
+    // }
 
     return out;
 }
