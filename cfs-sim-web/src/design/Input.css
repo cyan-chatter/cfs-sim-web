@@ -26,14 +26,6 @@
     justify-content: space-around;
 }
 
-label{
-    font-family: consolas;
-    font-weight: bold;
-    background: darkturquoise;
-    font-size: 1.2em;
-    margin : 10px;
-    padding : 5px;
-}
 
 .InputMain input{
     height: 40px;

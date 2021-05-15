@@ -249,8 +249,6 @@ const DynamicTree = ({dimensions,data}) => {
         
         setTimeout(()=>{
             curTree = genTree(curTree,data.simData[i],notifier)
-            console.log("message: ", notifier.message)
-            console.log("id: ", notifier.id)
             updateTaskMessages(notifier)
             update(curTree)
         },timeDelay)
@@ -264,9 +262,9 @@ const DynamicTree = ({dimensions,data}) => {
     <div className="simMain">
         <svg className="svg" ref= {svgRef}></svg>
         <div className="taskData">
-        <label>Current Task</label>   
+        <label>Current Task:</label>   
         <p className="taskId" ref= {taskIdRef}></p>
-        <label>Current Operation</label>   
+        <label>Current Operation:</label>   
         <p className="message" ref= {messageRef}></p>
         </div>
     </div>    
