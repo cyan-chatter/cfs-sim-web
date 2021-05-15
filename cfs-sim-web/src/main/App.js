@@ -7,7 +7,7 @@ import {useScheduler} from './useScheduler'
 
 var dimensions = {width : null, height : null}
 dimensions.width = 800
-dimensions.height = 600
+dimensions.height = 500
 
 const App = () => {
 

@@ -104,120 +104,124 @@ const DynamicTree = ({dimensions,data}) => {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
-
+    
     function update(sourceTree) {
       
-        console.log("sourceTree: ", sourceTree)
 
-        var root = sourceTree.root() 
-        console.log("root: ", root)///////////////
-    
-      if (root === Response.NIL) {  ///////checked out
-          root = {p: {}, val: 'NIL'};
+      var root = sourceTree.root() 
+      if (root === Response.NIL) {  
+          root = {p: {}, val: 'NIL'}
       }
-    
-      root.x0 = dimensions.height / 2 ////
+      root.x0 = dimensions.height / 2 
       root.y0 = 0
-    
-      // Don't update the read counts while scanning the tree
+
       //RESET_STATS();
     
-      // Compute the new tree layout.
       var nodes = tree.nodes(root).reverse()
       var links = tree.links(nodes)
     
-      console.log("nodes", nodes)
-
-      // Update the nodes…
       var node = svg.selectAll("g.node")
-          .data(nodes, function(d) { console.log("Each data", d); return d.id; });
+          .data(nodes, function(d) { return d.id })
     
-        console.log("node: ", node)///////////////
-
-      // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
           .attr("class", "node")
-          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; }) ////////////////checked
+          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")" }) 
 
-          console.log("nodeEnter: ", nodeEnter)///////////////  
-    
       nodeEnter.append("circle")
-          .attr("r", 1e-6)
+          .attr("r", 0.1)
           .style("fill", nodeColor)
-          .style("stroke", function(n) { return d3.rgb(nodeColor(n)).darker(); });
+          .style("stroke", function(n) { return d3.rgb(nodeColor(n)).darker() })
     
       nodeEnter.append("text")
-          .attr("x", function(d) { return d.children ? -10 : 10; })
-          .attr("dy", ".35em")
-          .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-          .text(function(d) { if (d.val !== 'NIL') { return d.val; }})
-          .style("fill-opacity", 1e-6);
-    
-      // Transition nodes to their new position.
+          //.attr("x", function(d) { return d.children ? -10 : 10; })
+          .attr("dy", "0.35em")
+          .attr("text-anchor", function(d) { return d.children ? "middle" : "start" })
+          .text(function(d) { if (d.val !== 'NIL') { return `${d.name}` }})
+          .style("fill-opacity", 0.1)  
+          //.text(function(d) { if (d.val !== 'NIL') { return `${d.val.toFixed(2)}` }})
+          
       var nodeUpdate = node.transition()
           .duration(duration)
-          .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; });
+          .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")" })
     
       nodeUpdate.select("circle")
           .attr("r", function(n) {
               if (n.val !== 'NIL') {
-                  return 4.5;
+                  return 20
               } else {
-                  return 1.5;
+                  return 2
               }
           })
           .style("fill", nodeColor)
-          .style("stroke", function(n) { return d3.rgb(nodeColor(n)).darker(); });
+          .style("stroke", function(n) { return d3.rgb(nodeColor(n)).darker() })
     
       nodeUpdate.select("text")
-          .style("fill-opacity", 1);
+          .style("fill-opacity", 1)
     
-      // Transition exiting nodes to the parent's new position.
       var nodeExit = node.exit().transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })////////////////////checked
+          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")" })
           .remove();
     
       nodeExit.select("circle")
-          .attr("r", 1e-6);
+          .attr("r", 0.1)
     
       nodeExit.select("text")
-          .style("fill-opacity", 1e-6);
+          .style("fill-opacity", 0.1)
     
-      // Update the links…
       var link = svg.selectAll("path.link")
-          .data(links, function(d) { return d.target.id; });
+          .data(links, function(d) { return d.target.id })
     
-      // Enter any new links at the parent's previous position.
       link.enter().insert("path", "g")
           .attr("class", "link")
+          .style("stroke", "black")
+          .style("stroke-width", 2)
           .attr("d", function(d) {
-            var o = {x: d.source.x, y: d.source.y};
-            return diagonal({source: o, target: o});
-          });
-    
-      // Transition links to their new position.
-      link.transition()
-          .duration(duration)
-          .attr("d", diagonal);
-    
-      // Transition exiting nodes to the parent's new position.
-      link.exit().transition()
-          .duration(duration)
-          .attr("d", function(d) {
-            var o = {x: d.source.x, y: d.source.y};
+            var o = {x: d.source.x, y: d.source.y}
             return diagonal({source: o, target: o});
           })
-          .remove();
     
-      // Stash the old positions for transition.
+      link
+        .attr("stroke-dasharray",function(){
+                const length = this.getTotalLength()
+                return length + " " + length
+        })
+        .attr("stroke-dashoffset",function(){
+        const length = this.getTotalLength()
+        return length
+        })
+        .transition()
+        .duration(duration)
+        .delay(linkObj => linkObj.source.depth * 2000)
+        .attr("stroke-dashoffset", 0)
+        .style("fill","none")
+        .attr("d", diagonal)
+    
+      link.exit()
+        .attr("stroke-dasharray",function(){
+        const length = this.getTotalLength()
+        return length + " " + length
+        })
+        .attr("stroke-dashoffset",function(){
+        const length = this.getTotalLength()
+        return length
+        })
+          .transition()
+          .duration(duration)
+          .attr("stroke-dashoffset", 0)
+          .attr("d", function(d) {
+            var o = {x: d.source.x, y: d.source.y}
+            return diagonal({source: o, target: o})
+          })
+          .remove()
+    
+      // Stashing the old positions of nodes for creating transition
       nodes.forEach(function(d) {
-        d.x0 = d.x;
-        d.y0 = d.y;
+        d.x0 = d.x
+        d.y0 = d.y
       });
     
-      // Update the stats values
-      
+      // Update node stats 
       // var reads = 0, writes = 0;
       // console.log(curTree.STATS);
       // for (var r in curTree.STATS.read) {
@@ -249,8 +253,8 @@ const DynamicTree = ({dimensions,data}) => {
         
         setTimeout(()=>{
             curTree = genTree(curTree,data.simData[i],notifier)
-            updateTaskMessages(notifier)
             update(curTree)
+            updateTaskMessages(notifier)
         },timeDelay)
 
         if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
