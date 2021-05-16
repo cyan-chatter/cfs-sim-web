@@ -251,7 +251,7 @@ const DynamicTree = ({dimensions,data}) => {
             
             const et = document.createElement('p')
             et.className = 'elapsedTime'
-            et.innerHTML = 'At Clock Tick ' + data.resultData[i].elapsedTime + ':'
+            et.innerHTML = 'At Iteration ' + i + ':' //data.resultData[i].elapsedTime
             li.appendChild(et)
 
             let eT;

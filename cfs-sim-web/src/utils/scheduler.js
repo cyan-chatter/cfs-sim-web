@@ -39,9 +39,16 @@ function updateSlices(tasks, period, curTime) {
         if (tasks[i].truntime >= tasks[i].burst_time) {
             continue;
         }
-        tasks[i].slice = (tasks[i].priority * period) / prioritySum; // divide by 1000 to convert to ms
+        tasks[i].slice = (tasks[i].priority * period) / prioritySum; // divide by 1000 to convert to ms 
         console.log("period = " + period + " priority_sum = " + prioritySum);
         console.log("Task " + tasks[i].id + " has slice = " + tasks[i].slice);
+        const sliceData = {
+            period : period.toFixed(2),
+            prioritySum : prioritySum,
+            taskId : tasks[i].id,
+            taskSlice : tasks[i].slice.toFixed(2)
+        }
+        return sliceData
     }
 }
 
@@ -94,7 +101,8 @@ function runScheduler(tasks, timeline) {
         let tresults = {
             running_task: null,
             completed_task: null,
-            elapsedTime : null
+            elapsedTime : null,
+            sliceData: null
         };
 
     
@@ -114,7 +122,8 @@ function runScheduler(tasks, timeline) {
             saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1,start_ms)
             //results.timelineData.push({...timeline})----------------timelineData
         }
-        updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
+
+        tresults.sliceData = updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
 
         // If there is a task running and its vruntime exceeds
         // min_vruntime then add it back to the timeline. Since
@@ -177,49 +186,6 @@ function runScheduler(tasks, timeline) {
         
         response.resultData.push({...tresults})
         
-        // for(let j of results.time_data){
-        //     for(var key in j.running_task){
-        //         console.log(chalk.blueBright(key, j.running_task[key]))
-        //     }
-        // }
-
-        
-        
-        // if (callback) {
-        //     callback(curTime, results);
-        // }
-
-        // const tempRes = new Object({...results});
-        // response.resultData.push(tempRes)
-
-        // console.log("pushed..\n", tempRes.timelineData)
-        // for(let i of tempRes.timelineData){
-        //     for(var key in i){
-        //         console.log(key, i[key])
-        //     }
-        // }
-
-        // for(let i of resultData){
-        
-        //     //time_data
-        //         for(let j of i.time_data){
-                    
-        //             for(var key in j.running_task){
-        //                 console.log(chalk.green(key, j.running_task[key]))
-        //             }
-        //         }
-        
-        //     //timelineData
-        //     // for(let j of i.timelineData){
-                
-        //     //     for(var key in j){
-        //     //         console.log(chalk.cyanBright(key, j[key]))
-        //     //     }
-        //     // }    
-            
-        // }
-
-
         if (task_done) {
             curTask = null;
         }
@@ -231,19 +197,13 @@ function runScheduler(tasks, timeline) {
     if (running_task) {
         timeline.insert(running_task)
         const message = running_task.id + " is Running"
-        saveTimeline(-1,running_task.id,message,"n",0,1,1,start_ms)
-        //results.timelineData.push({...timeline})----------------timelineData
+        saveTimeline(-1,running_task.id,message,"n",0,1,1,start_ms)        
     }
 
     response.node_stats = binaryTree.GET_STATS()
     response.elapsed_ms = (new Date().getTime()) - start_ms 
 
     //binaryTree.RESET_STATS();
-
-    /////////////////////////////////////check
-    // const tempRes = new Object({...results});
-    // response.resultData.push(tempRes)
-    ////////////////////////////////////check
 
     saveTimeline(-1,"-","Scheduler Operations are Over","n",0,0,1,start_ms)
 
