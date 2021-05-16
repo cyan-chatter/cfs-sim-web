@@ -148,6 +148,8 @@ function runScheduler(tasks, timeline) {
         // added back to the timeline.
         if (curTask && (curTask.vruntime > min_vruntime) && (curTask.this_slice > curTask.slice)
             && (curTask.this_slice > min_granularity / 1000)) {
+            timeline.insert(curTask)
+            console.log(curTask.vruntime)////////////////
             const message = "Inserting " + curTask.id + " with Virtual Runtime " + curTask.vruntime
             console.log(message)
             console.log(curTask)
