@@ -132,6 +132,7 @@ function runScheduler(tasks, timeline) {
         if (curTask && (curTask.vruntime > min_vruntime) && (curTask.this_slice > curTask.slice)
             && (curTask.this_slice > min_granularity)) {
             timeline.insert(curTask)
+            console.log(curTask.vruntime)////////////////
             const message = "Inserting " + curTask.id + " with Virtual Runtime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             saveTimeline(curTask.vruntime,curTask.id,message,'i',1,1,1,start_ms)
@@ -149,7 +150,8 @@ function runScheduler(tasks, timeline) {
             curTask.this_slice = 0;
             timeline.remove(min_node);
             //simTree.remove(simTree.min());
-            var message = "Removing " + curTask.id + " with Virtual Runtime, " + curTask.vruntime
+            console.log(curTask.vruntime)////////////////
+            var message = "Removing " + curTask.id + " with Virtual Runtime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
