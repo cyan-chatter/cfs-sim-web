@@ -251,7 +251,7 @@ const DynamicTree = ({dimensions,data}) => {
             
             const et = document.createElement('p')
             et.className = 'elapsedTime'
-            et.innerHTML = 'After ' + data.resultData[i].elapsedTime + ' ms :'
+            et.innerHTML = 'At Clock Tick ' + data.resultData[i].elapsedTime + ':'
             li.appendChild(et)
 
             let eT;
@@ -259,19 +259,19 @@ const DynamicTree = ({dimensions,data}) => {
             if(data.resultData[i].running_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Running Task: ${data.resultData[i].running_task.id} -> Virtual Runtime: ${data.resultData[i].running_task.vruntime}` 
+                eT.innerHTML = `Task Ran: ${data.resultData[i].running_task.id} with Virtual Runtime: ${data.resultData[i].running_task.vruntime}` 
                 li.appendChild(eT)
             }else{
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `No Task Ran at this Clock Tick` 
+                eT.innerHTML = `No Task Ran` 
                 li.appendChild(eT)
             }
 
             if(data.resultData[i].completed_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} -> Virtual Runtime: ${data.resultData[i].completed_task.vruntime}` 
+                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} with Virtual Runtime: ${data.resultData[i].completed_task.vruntime}` 
                 li.appendChild(eT)
             }
             
@@ -304,15 +304,21 @@ const DynamicTree = ({dimensions,data}) => {
     <div className="simMain">
         <svg className="svg" ref= {svgRef}></svg>
         <div className="taskData">
+        <div  className="dataWithTree">
         <label>Current Task:</label>   
         <p className="taskId" ref= {taskIdRef}></p>
         <label>Current Operation:</label>   
         <p className="message" ref= {messageRef}></p>
+        </div>
         <div className="reports">
-            <label>Operations Log:</label>   
-            <ol className="operationLog" ref= {operationLogRef}></ol>
-            <label>Tasks Ran at Each Clock Tick:</label>
-            <div className="tasksRunLog" ref = {tasksRunLogRef}></div>
+            <div className="labelDivBinder" id="rp1">
+                <label>Operations Log:</label>   
+                <ol className="log" id="operationLog" ref= {operationLogRef}></ol>
+            </div>
+            <div className="labelDivBinder" id="rp2">
+                <label>Tasks Ran at Each Clock Tick:</label>
+                <div className="log" id="tasksRunLog" ref = {tasksRunLogRef}></div>
+            </div>
         </div>
         </div>
     </div>    
