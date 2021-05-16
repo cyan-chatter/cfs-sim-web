@@ -19,6 +19,17 @@ var response = {
     simData: []
 }
 
+function roundTo(n, digits) {
+    if (digits === undefined) {
+        digits = 0;
+    }
+
+    var multiplicator = Math.pow(10, digits);
+    n = parseFloat((n * multiplicator).toFixed(11));
+    var test =(Math.round(n) / multiplicator);
+    return +(test.toFixed(digits));
+}
+
 function saveTimeline(val, id, message, op, isVal, isId, isM, start_ms) {
     const newSimTree = {
         val, id, message, op, isVal, isId, isM
@@ -32,9 +43,9 @@ var totalWeight;
 
 function updateSlices(tasks, period, curTime) {
     console.log("Updating Slices at time ", curTime);
-    console.log("tasks.length = ", tasks.length)
+
+    var sliceData = [];
     for (var i = 0; i < tasks.length; i++) {
-        console.log("taskName: ", tasks[i].id)
         if (tasks[i].arrival_time > curTime) {
             continue;
         }
@@ -44,14 +55,15 @@ function updateSlices(tasks, period, curTime) {
         tasks[i].slice = (tasks[i].weight * period) / (1000 * totalWeight); // divide by 1000 to convert to ms
         console.log("period = " + period + " priority_sum = " + totalWeight);
         console.log("Task " + tasks[i].id + " has slice = " + tasks[i].slice.toFixed(3));
-        const sliceData = {
+        const slice = {
             period: period.toFixed(2),
             totalWeight: totalWeight,
             taskId: tasks[i].id,
             taskSlice: tasks[i].slice.toFixed(2)
         }
-        return sliceData
+        sliceData.push(slice)
     }
+    return sliceData
 }
 
 function updateWeights(tasks) {
@@ -105,7 +117,7 @@ function runScheduler(tasks, timeline) {
 
     // Loop from time/tick 0 through the total time/ticks specified
     for (var curTime = 1; curTime <= tasks.total_time; curTime++) {
-        if(tasksCompleted == time_queue.length) break;
+        if(tasksCompleted === time_queue.length) break;
         var curTask = null
         if (running_task != null) curTask = {...running_task}
         // Periodic debug output
@@ -150,10 +162,9 @@ function runScheduler(tasks, timeline) {
             && (curTask.this_slice > min_granularity / 1000)) {
             timeline.insert(curTask)
             console.log(curTask.vruntime)////////////////
-            const message = "Inserting " + curTask.id + " with Virtual Runtime " + curTask.vruntime
+            const message = "Inserting " + curTask.id + " with Virtual Runtime " + roundTo(curTask.vruntime, 3)
             console.log(message)
             console.log(curTask)
-            timeline.insert(curTask)
             //results.timelineData.push({...timeline})----------------timelineData
             saveTimeline(curTask.vruntime, curTask.id, message, 'i', 1, 1, 1, start_ms)
             curTask = null
@@ -169,14 +180,14 @@ function runScheduler(tasks, timeline) {
             curTask = min_node.val;
             curTask.this_slice = 0;
             //simTree.remove(simTree.min());
-            var message = "Removing " + curTask.id + " with Virtual Runtime, " + curTask.vruntime
+            var message = "Removing " + curTask.id + " with Virtual Runtime, " + roundTo(curTask.vruntime, 3)
             console.log(message)
             console.log(curTask)
+            timeline.remove(min_node);
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
-                message += " Updating Minimum Virtual Runtime to " + min_vruntime
+                message += " Updating Minimum Virtual Runtime to " + roundTo(min_vruntime, 3)
             }
-            timeline.remove(min_node);
             //results.timelineData.push({...timeline})----------------timelineData
             saveTimeline(-1, curTask.id, message, "r", 0, 1, 1, start_ms)
         }

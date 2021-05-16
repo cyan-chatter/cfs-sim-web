@@ -237,7 +237,7 @@ const DynamicTree = ({dimensions,data}) => {
         taskIdRef.current.innerHTML = notifier.id
     }
 
-    var timeDelay = 300, timeIncrement = 2000, syncTimeIncrement = 0
+    var timeDelay = 300, timeIncrement = 200, syncTimeIncrement = 0
     var curTree,notifier={
         id: null,
         message: null
@@ -259,7 +259,7 @@ const DynamicTree = ({dimensions,data}) => {
             if(data.resultData[i].running_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Task Ran: ${data.resultData[i].running_task.id} with Virtual Runtime: ${data.resultData[i].running_task.vruntime}` 
+                eT.innerHTML = `Task Ran: ${data.resultData[i].running_task.id} with Virtual Runtime: ${data.resultData[i].running_task.vruntime.toFixed(3)}`
                 li.appendChild(eT)
             }else{
                 eT = document.createElement('p')
@@ -271,7 +271,7 @@ const DynamicTree = ({dimensions,data}) => {
             if(data.resultData[i].completed_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} with Virtual Runtime: ${data.resultData[i].completed_task.vruntime}` 
+                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} with Virtual Runtime: ${data.resultData[i].completed_task.vruntime.toFixed(3)}`
                 li.appendChild(eT)
             }
             
