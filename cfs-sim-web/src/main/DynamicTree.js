@@ -251,15 +251,20 @@ const DynamicTree = ({dimensions,data}) => {
             
             const et = document.createElement('p')
             et.className = 'elapsedTime'
-            et.innerHTML = 'At Iteration ' + i + ':' //data.resultData[i].elapsedTime
+            et.innerHTML = 'At Iteration ' + i + ':' //
             li.appendChild(et)
 
             let eT;
             
+            eT = document.createElement('p')
+            eT.className = 'elapsedTask'
+            eT.innerHTML = `Elapsed Time: ${data.resultData[i].elapsedTime} ms`
+            li.appendChild(eT)
+
             if(data.resultData[i].running_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Task Ran: ${data.resultData[i].running_task.id} with Virtual Runtime: ${data.resultData[i].running_task.vruntime.toFixed(3)}`
+                eT.innerHTML = `Task Ran: ${data.resultData[i].running_task.id} with Virtual Runtime: ${data.resultData[i].running_task.vruntime.toFixed(3)} ms`
                 li.appendChild(eT)
             }else{
                 eT = document.createElement('p')
@@ -271,8 +276,18 @@ const DynamicTree = ({dimensions,data}) => {
             if(data.resultData[i].completed_task !== null){
                 eT = document.createElement('p')
                 eT.className = 'elapsedTask'
-                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} with Virtual Runtime: ${data.resultData[i].completed_task.vruntime.toFixed(3)}`
+                eT.innerHTML = `Completed Task: ${data.resultData[i].completed_task.id} with Virtual Runtime: ${data.resultData[i].completed_task.vruntime.toFixed(3)} ms`
                 li.appendChild(eT)
+            }
+
+            if(data.resultData[i].sliceData.length !== 0){
+                let x = data.resultData[i].sliceData
+                for(let j=0; j<x.length; ++j){
+                    eT = document.createElement('p')
+                    eT.className = 'elapsedTask'
+                    eT.innerHTML = `${x[j].taskId} has time slice ${x[j].taskSlice} ms`
+                    li.appendChild(eT)
+                }
             }
             
             tasksRunLogRef.current.appendChild(li)
@@ -292,7 +307,7 @@ const DynamicTree = ({dimensions,data}) => {
         },timeDelay)
 
         if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
-            syncTimeIncrement = (data.syncTime[i] - data.syncTime[i-1])*1000
+            syncTimeIncrement = (data.syncTime[i] - data.syncTime[i-1])*400
         }
         timeDelay += (timeIncrement + syncTimeIncrement)
         
