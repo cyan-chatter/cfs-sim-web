@@ -52,7 +52,7 @@ function runScheduler(tasks, timeline) {
     var start_ms = new Date().getTime();
     binaryTree.RESET_STATS();
     
-    saveTimeline(-1,"-","Scheduler begins the operations","s",0,0,1,start_ms)
+    saveTimeline(-1,"-","Scheduler Begins the Operations","s",0,0,1,start_ms)
     //var resultData = []
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
@@ -110,7 +110,7 @@ function runScheduler(tasks, timeline) {
             new_task.this_slice = 0;
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
-            const message = "Adding " + new_task.id + " with vruntime " + new_task.vruntime
+            const message = "Inserting " + new_task.id + " with Virtual Runtime " + new_task.vruntime
             saveTimeline(new_task.vruntime,new_task.id,message,'i',1,1,1,start_ms)
             //results.timelineData.push({...timeline})----------------timelineData
         }
@@ -123,7 +123,7 @@ function runScheduler(tasks, timeline) {
         if (curTask && (curTask.vruntime > min_vruntime) && (curTask.this_slice > curTask.slice)
             && (curTask.this_slice > min_granularity)) {
             timeline.insert(curTask)
-            const message = "Inserting " + curTask.id + " with vruntime " + curTask.vruntime
+            const message = "Inserting " + curTask.id + " with Virtual Runtime " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             saveTimeline(curTask.vruntime,curTask.id,message,'i',1,1,1,start_ms)
             curTask = null
@@ -140,11 +140,11 @@ function runScheduler(tasks, timeline) {
             curTask.this_slice = 0;
             timeline.remove(min_node);
             //simTree.remove(simTree.min());
-            var message = "Removing " + curTask.id + " with vruntime " + curTask.vruntime
+            var message = "Removing " + curTask.id + " with Virtual Runtime, " + curTask.vruntime
             //results.timelineData.push({...timeline})----------------timelineData
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
-                message += "    Updating min_vruntime to " + min_vruntime
+                message += " Updating Minimum Virtual Runtime to " + min_vruntime
             }
             saveTimeline(-1,curTask.id,message,"r",0,1,1,start_ms)
         }
@@ -167,7 +167,7 @@ function runScheduler(tasks, timeline) {
                 prioritySum -= curTask.priority
                 task_done = true // Set curTask to null later
                 //console.log("Completed task:", curTask.id);
-                const message = curTask.id + " is over"
+                const message = curTask.id + " has Completed"
                 saveTimeline(-1,"-",message,"n",0,0,1,start_ms)
             }
         }
@@ -230,7 +230,7 @@ function runScheduler(tasks, timeline) {
     // Put any currently running task back in the timeline
     if (running_task) {
         timeline.insert(running_task)
-        const message = running_task.id + " is running"
+        const message = running_task.id + " is Running"
         saveTimeline(-1,running_task.id,message,"n",0,1,1,start_ms)
         //results.timelineData.push({...timeline})----------------timelineData
     }
@@ -245,7 +245,7 @@ function runScheduler(tasks, timeline) {
     // response.resultData.push(tempRes)
     ////////////////////////////////////check
 
-    saveTimeline(-1,"-","Scheduler operations are over","n",0,0,1,start_ms)
+    saveTimeline(-1,"-","Scheduler Operations are Over","n",0,0,1,start_ms)
 
     return response
 }
