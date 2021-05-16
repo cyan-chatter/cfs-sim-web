@@ -14,7 +14,12 @@ const App = () => {
 
   const [InputData, setInputData] = useState(null) 
   const [PostToServerData, setPostToServerData] = useState(null) 
-  const [DisabledSimulate, setDisabledSimulate] = useState(true)
+  
+  ////////////////mod///////////////
+  //const [DisabledSimulate, setDisabledSimulate] = useState(true)
+  const [DisabledSimulate, setDisabledSimulate] = useState(false)
+  ////////////////mod///////////////
+  
   const treeRef = useRef(null)
 
   //var dimensions = useWindowSize()
@@ -26,7 +31,30 @@ const App = () => {
   const onClickToFetchHandler = () => {
     console.log('clicked to fetch')
     if(!DisabledSimulate){
-      setPostToServerData({...InputData})
+
+      ////////////////mod///////////////
+      const dummyData = {    
+        num_of_tasks : 3,
+        total_time : 11,
+        task_queue : [
+            {id : 'A',
+            arrival_time : 1,
+            burst_time : 3,
+            priority : 2},
+            {id : 'B',
+            arrival_time : 2,
+            burst_time : 4,
+            priority : 1},
+            {id : 'C',
+            arrival_time : 2,
+            burst_time : 3,
+            priority : 3}
+        ]
+      }
+      setPostToServerData({...dummyData})
+      // setPostToServerData({...InputData})
+      ////////////////mod///////////////
+
       setDisabledSimulate(true)
     } 
   }
