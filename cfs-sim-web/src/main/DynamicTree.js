@@ -173,14 +173,14 @@ const DynamicTree = ({dimensions,data}) => {
       link
         .style("stroke", "black")
         .style("stroke-width", 2)
-        .attr("stroke-dasharray",function(){
-                const length = this.getTotalLength()
-                return length + " " + length
-        })
-        .attr("stroke-dashoffset",function(){
-        const length = this.getTotalLength()
-        return length
-        })
+        // .attr("stroke-dasharray",function(){
+        //         const length = this.getTotalLength()
+        //         return length + " " + length
+        // })
+        // .attr("stroke-dashoffset",function(){
+        // const length = this.getTotalLength()
+        // return length
+        // })
         .transition()
         .duration(duration)
         .delay(linkObj => linkObj.source.depth * 500)
