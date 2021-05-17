@@ -16,7 +16,9 @@ export const genTree = (simTree, tgd, notifier, syncTime) => {
     }
 
     else if(tgd.op == "r"){
-        simTree.remove(simTree.min())
+        if(simTree !== null && simTree.min() !== null){
+            simTree.remove(simTree.min())
+        }
     }
 
 

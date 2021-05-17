@@ -305,46 +305,55 @@ const DynamicTree = ({dimensions,data}) => {
 
     }
 
-    let aflag = 1
-    let j = 0;
-    for(let i=0; i<data.simData.length;++i){
-        
-        setTimeout(()=>{
-            if(i < data.simData.length && aflag === 1){
-                curTree = genTree(curTree,data.simData[i],notifier,data.syncTime[i])
-                update(curTree)
-                aflag = 0
-            }
-            //merge subroutine
-            if(i < data.simData.length && j < data.resultData.length){
-                if(data.syncTime[i] <= data.resultData[j].elapsedTime){
-                    updateTaskMessages(notifier)
-                    aflag = 1
-                }
-                else{
-                    updateTasksRanAtEachTickLog(j)
-                    ++j;
-                    --i;
-                }
-
-            }
-         
-            //for the rest of the tasks report
-            // if(i >= data.simData.length && j<data.resultData.length){
-            //     while(j < data.resultData.length){
-            //         updateTasksRanAtEachTickLog(j)
-            //         ++j;
-            //     }
-            // }
-
-        },timeDelay)
-        
-        if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
-            timeDelay += syncTimeIncrement
-        }    
-
+    const io = {
+        i : 0,
+        j : 0
     }
+
+    function setDeceleratingTimeout(callback, factor, times){
+        var internalCallback = function(tick, counter) {
+            return function() {
+                if (--tick >= 0) {
+                    window.setTimeout(internalCallback, ++counter * factor);
+                    callback(io);
+                }
+            }
+        }(times, 0);
+        window.setTimeout(internalCallback, factor);
+    }
+
+    const syncReporter = (io) => {
+
+        if(io.i < data.simData.length && io.j < data.resultData.length){
+            if(data.syncTime[io.i] <= data.resultData[io.j].elapsedTime){
+                curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
+                update(curTree)
+                updateTaskMessages(notifier)
+                ++io.i;
+            }
+            else{
+                updateTasksRanAtEachTickLog(io.j)
+                ++io.j;
+            }
+        }
+        else if(io.i < data.simData.length && io.j >= data.resultData.length){
+            curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
+            update(curTree)
+            updateTaskMessages(notifier)
+            ++io.i;
+        }
+        else if(io.i >= data.simData.length && io.j < data.resultData.length){
+            updateTasksRanAtEachTickLog(io.j)
+            ++io.j;
+        }
+    }        
+        // if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
+        //     timeDelay += syncTimeIncrement
+        // }   
+        // data.simData.length + data.resultData.length + 1
     
+    setDeceleratingTimeout(syncReporter, 40, data.simData.length + data.resultData.length + 1) 
+
   }, [dimensions,data])
 
   return (
