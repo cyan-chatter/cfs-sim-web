@@ -58,8 +58,6 @@ const DynamicTree = ({dimensions,data}) => {
     function vsort(a,b) {
       return a.val.vruntime - b.val.vruntime;
     }
-    
-    //console.log("data in dynamic tree: ", curTrees)
 
     var nilIdx = 0
     var tree = d3.layout.tree()  
@@ -107,8 +105,6 @@ const DynamicTree = ({dimensions,data}) => {
       }
       root.x0 = dimensions.height / 2 
       root.y0 = 0
-
-      //RESET_STATS();
     
       var nodes = tree.nodes(root).reverse()
       var links = tree.links(nodes)
@@ -207,21 +203,6 @@ const DynamicTree = ({dimensions,data}) => {
         d.y0 = d.y
       });
     
-      // Update node stats 
-      // var reads = 0, writes = 0;
-      // console.log(curTree.STATS);
-      // for (var r in curTree.STATS.read) {
-      //   reads += curTree.STATS.read[r];
-      // }
-      // for (var r in curTree.STATS.write) {
-      //   writes += curTree.STATS.write[r];
-      // }
-      // $('#stats_reads').innerText = reads;
-      // $('#stats_writes').innerText = writes;
-    
-      // // Reset the stats to be the internal one for this tree
-      // RESET_STATS(curTree.STATS);
-
     }
 
     const createRepText = (ih,cn) => {
@@ -245,8 +226,7 @@ const DynamicTree = ({dimensions,data}) => {
         taskIdRef.current.innerHTML = notifier.id
     }
 
-    var timeDelay = 200, syncTimeIncrement = 1000
-    //var timeIncrement = 1000 
+    
     var curTree,notifier={
         id: null,
         message: null,
@@ -347,11 +327,7 @@ const DynamicTree = ({dimensions,data}) => {
             ++io.j;
         }
     }        
-        // if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
-        //     timeDelay += syncTimeIncrement
-        // }   
-        // data.simData.length + data.resultData.length + 1
-    
+        
     setDeceleratingTimeout(syncReporter, 40, data.simData.length + data.resultData.length + 1) 
 
   }, [dimensions,data])
