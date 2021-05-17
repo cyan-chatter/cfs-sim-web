@@ -107,7 +107,7 @@
     font-weight: bold;
 }
 
-.elapsedTime{
+.iteration{
     background:cornflowerblue;
     border-radius: 2rem;
     text-align: center;
@@ -115,6 +115,15 @@
     font-family: consolas;
     padding: 2px;
     margin: 2px;
+}
+
+.elapsedTime{
+    background:cornsilk;
+    border-radius: 2rem;
+    text-align: center;
+    font-weight: bold;
+    font-family: consolas;
+    padding: 2px;
 }
 
 #tasksRunLog{

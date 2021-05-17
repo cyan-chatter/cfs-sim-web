@@ -215,7 +215,7 @@ const DynamicTree = ({dimensions,data}) => {
     const updateOperationLog = (m,et,r) => {
         const li = document.createElement('li')
         li.className = 'reportLine'
-        li.appendChild(createRepText(`Elapsed Time: ${et} units`, 'elapsedTask'))
+        li.appendChild(createRepText(`Elapsed Time: ${et} units`, 'elapsedTime'))
         li.appendChild(createRepText(m, 'elapsedTask'))
         r.current.appendChild(li)
     }
@@ -240,14 +240,14 @@ const DynamicTree = ({dimensions,data}) => {
             li.className = 'reportLine'
             
             const et = document.createElement('p')
-            et.className = 'elapsedTime'
+            et.className = 'iteration'
             et.innerHTML = 'At Iteration ' + i + ':' //
             li.appendChild(et)
 
             let eT;
             
             eT = document.createElement('p')
-            eT.className = 'elapsedTask'
+            eT.className = 'elapsedTime'
             eT.innerHTML = `Elapsed Time: ${data.resultData[i].elapsedTime} units`
             li.appendChild(eT)
 
