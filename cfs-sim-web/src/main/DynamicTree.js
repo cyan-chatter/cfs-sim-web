@@ -245,16 +245,17 @@ const DynamicTree = ({dimensions,data}) => {
         taskIdRef.current.innerHTML = notifier.id
     }
 
-    var timeDelay = 300, timeIncrement = 200, syncTimeIncrement = 0
+    var timeDelay = 200, syncTimeIncrement = 1000
+    //var timeIncrement = 1000 
     var curTree,notifier={
         id: null,
         message: null,
         eTime : null
     }
 
-    const updateTasksRanAtEachTickLog = () => {
+    const updateTasksRanAtEachTickLog = (i) => {
         
-        for(let i=0; i<data.resultData.length; ++i){
+        
             let li = document.createElement('div')
             li.className = 'reportLine'
             
@@ -300,26 +301,48 @@ const DynamicTree = ({dimensions,data}) => {
             }
             
             tasksRunLogRef.current.appendChild(li)
-        }
+        
 
     }
 
-    for(let i=0; i<data.simData.length; ++i){
+    let aflag = 1
+    let j = 0;
+    for(let i=0; i<data.simData.length;++i){
         
         setTimeout(()=>{
-            curTree = genTree(curTree,data.simData[i],notifier,data.syncTime[i])
-            update(curTree)
-            updateTaskMessages(notifier)
-            if(i === data.simData.length - 1){
-                updateTasksRanAtEachTickLog()
+            if(i < data.simData.length && aflag === 1){
+                curTree = genTree(curTree,data.simData[i],notifier,data.syncTime[i])
+                update(curTree)
+                aflag = 0
             }
-        },timeDelay)
+            //merge subroutine
+            if(i < data.simData.length && j < data.resultData.length){
+                if(data.syncTime[i] <= data.resultData[j].elapsedTime){
+                    updateTaskMessages(notifier)
+                    aflag = 1
+                }
+                else{
+                    updateTasksRanAtEachTickLog(j)
+                    ++j;
+                    --i;
+                }
 
-        if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
-            syncTimeIncrement = (data.syncTime[i] - data.syncTime[i-1])*500
-        }
-        timeDelay += (timeIncrement + syncTimeIncrement)
+            }
+         
+            //for the rest of the tasks report
+            // if(i >= data.simData.length && j<data.resultData.length){
+            //     while(j < data.resultData.length){
+            //         updateTasksRanAtEachTickLog(j)
+            //         ++j;
+            //     }
+            // }
+
+        },timeDelay)
         
+        if(i>=1 && data.syncTime[i] - data.syncTime[i-1] > 0){
+            timeDelay += syncTimeIncrement
+        }    
+
     }
     
   }, [dimensions,data])
