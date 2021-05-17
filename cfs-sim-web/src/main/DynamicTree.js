@@ -224,23 +224,32 @@ const DynamicTree = ({dimensions,data}) => {
 
     }
 
-    const updateOperationLog = (m) => {
+    const createRepText = (ih,cn) => {
+        let rt = document.createElement('p')
+        rt.className = cn
+        rt.innerHTML = ih
+        return rt
+    }
+
+    const updateOperationLog = (m,et,r) => {
         const li = document.createElement('li')
         li.className = 'reportLine'
-        li.innerHTML = m
-        operationLogRef.current.appendChild(li)
+        li.appendChild(createRepText(`Elapsed Time: ${et} units`, 'elapsedTask'))
+        li.appendChild(createRepText(m, 'elapsedTask'))
+        r.current.appendChild(li)
     }
 
     const updateTaskMessages = (notifier) => {
         messageRef.current.innerHTML = notifier.message
-        updateOperationLog(notifier.message)
+        updateOperationLog(notifier.message,notifier.eTime,operationLogRef)
         taskIdRef.current.innerHTML = notifier.id
     }
 
     var timeDelay = 300, timeIncrement = 200, syncTimeIncrement = 0
     var curTree,notifier={
         id: null,
-        message: null
+        message: null,
+        eTime : null
     }
 
     const updateTasksRanAtEachTickLog = () => {
@@ -298,7 +307,7 @@ const DynamicTree = ({dimensions,data}) => {
     for(let i=0; i<data.simData.length; ++i){
         
         setTimeout(()=>{
-            curTree = genTree(curTree,data.simData[i],notifier)
+            curTree = genTree(curTree,data.simData[i],notifier,data.syncTime[i])
             update(curTree)
             updateTaskMessages(notifier)
             if(i === data.simData.length - 1){
