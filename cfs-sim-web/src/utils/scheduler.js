@@ -147,7 +147,7 @@ function runScheduler(tasks, timeline) {
             new_task.actual_arrival_time = curTime;
             timeline.insert(new_task);
             updateSummationWeights(new_task.weight)
-            const message = "Inserting " + new_task.id + " with Virtual Runtime " + new_task.vruntime
+            const message = "Inserting " + new_task.id + " with Virtual Runtime " + new_task.vruntime + " units"
             saveTimeline(new_task.vruntime, new_task.id, message, 'i', 1, 1, 1, start_ms)
             //results.timelineData.push({...timeline})----------------timelineData
         }
@@ -162,7 +162,7 @@ function runScheduler(tasks, timeline) {
             && (curTask.this_slice > min_granularity / 1000)) {
             timeline.insert(curTask)
             console.log(curTask.vruntime)////////////////
-            const message = "Inserting " + curTask.id + " with Virtual Runtime " + roundTo(curTask.vruntime, 3)
+            const message = "Inserting " + curTask.id + " with Virtual Runtime " + roundTo(curTask.vruntime, 3) + " units"
             console.log(message)
             console.log(curTask)
             //results.timelineData.push({...timeline})----------------timelineData
@@ -180,13 +180,13 @@ function runScheduler(tasks, timeline) {
             curTask = min_node.val;
             curTask.this_slice = 0;
             //simTree.remove(simTree.min());
-            var message = "Removing " + curTask.id + " with Virtual Runtime, " + roundTo(curTask.vruntime, 3)
+            var message = "Removing " + curTask.id + " with Virtual Runtime " + roundTo(curTask.vruntime, 3) + " units"
             console.log(message)
             console.log(curTask)
             timeline.remove(min_node);
             if (timeline.size() > 0) {
                 min_vruntime = timeline.min().val.vruntime
-                message += " Updating Minimum Virtual Runtime to " + roundTo(min_vruntime, 3)
+                message += ", Updating Minimum Virtual Runtime to " + roundTo(min_vruntime, 3) + " units"
             }
             //results.timelineData.push({...timeline})----------------timelineData
             saveTimeline(-1, curTask.id, message, "r", 0, 1, 1, start_ms)
