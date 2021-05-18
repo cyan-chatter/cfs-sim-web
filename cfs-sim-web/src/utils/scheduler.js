@@ -154,7 +154,7 @@ function runScheduler(tasks, timeline) {
             //results.timelineData.push({...timeline})----------------timelineData
         }
 
-        tresults.sliceData = updateSlices(tasks.task_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
+        tresults.sliceData = updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
 
         // If there is a task running and its vruntime exceeds
         // min_vruntime then add it back to the timeline. Since
