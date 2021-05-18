@@ -13,6 +13,7 @@ if (typeof module !== 'undefined') {
 
 var response = {
     resultData: [],
+    throughput: null,
     node_stats: null,
     elapsed_ms: null,
     syncTime: [],
@@ -236,6 +237,7 @@ function runScheduler(tasks, timeline) {
 
     response.node_stats = binaryTree.GET_STATS()
     response.elapsed_ms = (new Date().getTime()) - start_ms
+    response.throughput = response.elapsed_ms / tasks.num_of_tasks
 
     //binaryTree.RESET_STATS();
 
