@@ -117,7 +117,7 @@ function runScheduler(tasks, timeline) {
     totalWeight = 0;
 
     // Loop from time/tick 0 through the total time/ticks specified
-    for (var curTime = 1; curTime <= tasks.total_time; curTime++) {
+    for (var curTime = 0;; curTime++) {
         if(tasksCompleted === time_queue.length) break;
         var curTask = null
         if (running_task != null) curTask = running_task
