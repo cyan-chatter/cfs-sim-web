@@ -42,6 +42,7 @@ const DynamicTree = ({dimensions,data}) => {
   const taskIdRef = useRef()
   const tasksRunLogRef = useRef()
   const operationLogRef = useRef()
+  const throughputRef = useRef()
 
   useEffect(() => {
   
@@ -215,7 +216,7 @@ const DynamicTree = ({dimensions,data}) => {
     const updateOperationLog = (m,et,r) => {
         const li = document.createElement('li')
         li.className = 'reportLine'
-        li.appendChild(createRepText(`Elapsed Time: ${et} units`, 'elapsedTime'))
+        li.appendChild(createRepText(`Elapsed Time: ${et} ms`, 'elapsedTime'))
         li.appendChild(createRepText(m, 'elapsedTask'))
         r.current.appendChild(li)
     }
@@ -248,7 +249,7 @@ const DynamicTree = ({dimensions,data}) => {
             
             eT = document.createElement('p')
             eT.className = 'elapsedTime'
-            eT.innerHTML = `Elapsed Time: ${data.resultData[i].elapsedTime} units`
+            eT.innerHTML = `Elapsed Time: ${data.resultData[i].elapsedTime} ms`
             li.appendChild(eT)
 
             if(data.resultData[i].running_task !== null){
@@ -329,6 +330,7 @@ const DynamicTree = ({dimensions,data}) => {
     }        
         
     setDeceleratingTimeout(syncReporter, 30, data.simData.length + data.resultData.length + 1)
+    throughputRef.current.innerHTML = `${data.throughput} tasks per millisecond`
 
   }, [dimensions,data])
 
@@ -351,6 +353,10 @@ const DynamicTree = ({dimensions,data}) => {
                 <label>Tasks Ran at Each Clock Tick:</label>
                 <div className="log" id="tasksRunLog" ref = {tasksRunLogRef}></div>
             </div>
+        </div>
+        <div> 
+        <label>Throughput:</label>   
+        <p className="message" ref= {throughputRef}></p>
         </div>
         </div>
     </div>    
