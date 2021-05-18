@@ -53,6 +53,7 @@ function updateSlices(tasks, period, curTime) {
         if (tasks[i].truntime === tasks[i].burst_time) {
             continue;
         }
+        console.log("tasks data ", tasks[i].id, tasks[i].truntime, tasks[i].burst_time)
         tasks[i].slice = (tasks[i].weight * period) / (1000 * totalWeight); // divide by 1000 to convert to ms
         console.log("period = " + period + " priority_sum = " + totalWeight);
         console.log("Task " + tasks[i].id + " has slice = " + tasks[i].slice.toFixed(3));

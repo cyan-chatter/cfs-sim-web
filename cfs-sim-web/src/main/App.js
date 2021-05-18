@@ -15,10 +15,10 @@ const App = () => {
     const [InputData, setInputData] = useState(null)
     const [PostToServerData, setPostToServerData] = useState(null)
 
-    ////////////////mod///////////////
-    //const [DisabledSimulate, setDisabledSimulate] = useState(true)
-    const [DisabledSimulate, setDisabledSimulate] = useState(false)
-    ////////////////mod///////////////
+    
+    const [DisabledSimulate, setDisabledSimulate] = useState(true)
+    //const [DisabledSimulate, setDisabledSimulate] = useState(false)
+    
 
     const treeRef = useRef(null)
 
@@ -32,47 +32,40 @@ const App = () => {
         console.log('clicked to fetch')
         if (!DisabledSimulate) {
 
-            ////////////////mod///////////////
-            const dummyData = {
-                num_of_tasks: 5,
-                total_time: 100,
-                task_queue: [
-                    {
-                        id: 'A',
-                        arrival_time: 1,
-                        burst_time: 8,
-                        priority: 2
-                    },
-                    {
-                        id: 'B',
-                        arrival_time: 4,
-                        burst_time: 6,
-                        priority: 1
-                    },
-                    {
-                        id: 'C',
-                        arrival_time: 2,
-                        burst_time: 7,
-                        priority: 3
-                    },
-                    {
-                        id: 'D',
-                        arrival_time: 10,
-                        burst_time: 5,
-                        priority: 5
-                    },
-                    {
-                        id: 'E',
-                        arrival_time: 5,
-                        burst_time: 8,
-                        priority: 4
-                    }
-                ]
-            }
-            setPostToServerData({...dummyData})
-            // setPostToServerData({...InputData})
-            ////////////////mod///////////////
-
+            
+            // const dummyData = {
+            //     num_of_tasks: 4,
+            //     total_time: 100,
+            //     task_queue: [
+            //         {
+            //             id: 'A',
+            //             arrival_time: 12,
+            //             burst_time: 22,
+            //             priority: 1
+            //         },
+            //         {
+            //             id: 'B',
+            //             arrival_time: 5,
+            //             burst_time: 9,
+            //             priority: 2
+            //         },
+            //         {
+            //             id: 'C',
+            //             arrival_time: 7,
+            //             burst_time: 20,
+            //             priority: 3
+            //         },
+            //         {
+            //             id: 'D',
+            //             arrival_time: 2,
+            //             burst_time: 6,
+            //             priority: 4
+            //         }
+            //     ]
+            // }
+            //setPostToServerData({...dummyData})
+            setPostToServerData({...InputData})
+            
             setDisabledSimulate(true)
         }
     }
