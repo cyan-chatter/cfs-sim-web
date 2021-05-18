@@ -328,7 +328,7 @@ const DynamicTree = ({dimensions,data}) => {
         }
     }        
         
-    setDeceleratingTimeout(syncReporter, 40, data.simData.length + data.resultData.length + 1) 
+    setDeceleratingTimeout(syncReporter, 30, data.simData.length + data.resultData.length + 1)
 
   }, [dimensions,data])
 

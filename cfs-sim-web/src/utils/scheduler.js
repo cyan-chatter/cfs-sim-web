@@ -49,7 +49,7 @@ function updateSlices(tasks, period, curTime) {
         if (tasks[i].arrival_time > curTime) {
             continue;
         }
-        if (tasks[i].truntime >= tasks[i].burst_time) {
+        if (tasks[i].truntime === tasks[i].burst_time) {
             continue;
         }
         tasks[i].slice = (tasks[i].weight * period) / (1000 * totalWeight); // divide by 1000 to convert to ms
@@ -119,7 +119,7 @@ function runScheduler(tasks, timeline) {
     for (var curTime = 1; curTime <= tasks.total_time; curTime++) {
         if(tasksCompleted === time_queue.length) break;
         var curTask = null
-        if (running_task != null) curTask = {...running_task}
+        if (running_task != null) curTask = running_task
         // Periodic debug output
         if (curTime % 500 === 0) {
             //console.error("curTime: " + curTime + ", size: " + timeline.size() + ", task index: " + time_queue_idx);
@@ -152,7 +152,7 @@ function runScheduler(tasks, timeline) {
             //results.timelineData.push({...timeline})----------------timelineData
         }
 
-        tresults.sliceData = updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
+        tresults.sliceData = updateSlices(tasks.task_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
 
         // If there is a task running and its vruntime exceeds
         // min_vruntime then add it back to the timeline. Since
@@ -209,7 +209,7 @@ function runScheduler(tasks, timeline) {
                 tresults.completed_task = curTask
                 updateSummationWeights(-1 * curTask.weight)
                 task_done = true // Set curTask to null later
-                //console.log("Completed task:", curTask.id);
+                console.log("Completed task:", curTask.id);
                 const message = curTask.id + " has Completed"
                 saveTimeline(-1, "-", message, "n", 0, 0, 1, start_ms)
             }
