@@ -357,8 +357,9 @@ const DynamicTree = ({dimensions,data}) => {
             </div>
         </div>
         <div> 
+            <br/>
         <label>Throughput:</label>   
-        <p className="message" ref= {throughputRef}></p>
+        <p className="message" id="throughput" ref= {throughputRef}></p>
         </div>
         </div>
     </div>    
