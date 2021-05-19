@@ -305,31 +305,44 @@ const DynamicTree = ({dimensions,data}) => {
 
     const syncReporter = (io) => {
 
-        if(io.i < data.simData.length && io.j < data.resultData.length){
-            if(data.syncTime[io.i] <= data.resultData[io.j].elapsedTime){
+        // if(io.i < data.simData.length && io.j < data.resultData.length){
+        //     if(data.syncTime[io.i] <= data.resultData[io.j].elapsedTime){
+        //         curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
+        //         update(curTree)
+        //         updateTaskMessages(notifier)
+        //         ++io.i;
+        //     }
+        //     else{
+        //         updateTasksRanAtEachTickLog(io.j)
+        //         ++io.j;
+        //     }
+        // }
+        // else if(io.i < data.simData.length && io.j >= data.resultData.length){
+        //     curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
+        //     update(curTree)
+        //     updateTaskMessages(notifier)
+        //     ++io.i;
+        // }
+        // else if(io.i >= data.simData.length && io.j < data.resultData.length){
+        //     updateTasksRanAtEachTickLog(io.j)
+        //     ++io.j;
+        // }
+
+        if(io.i < data.simData.length){
                 curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
                 update(curTree)
                 updateTaskMessages(notifier)
                 ++io.i;
-            }
-            else{
-                updateTasksRanAtEachTickLog(io.j)
-                ++io.j;
-            }
         }
-        else if(io.i < data.simData.length && io.j >= data.resultData.length){
-            curTree = genTree(curTree,data.simData[io.i],notifier,data.syncTime[io.i])
-            update(curTree)
-            updateTaskMessages(notifier)
-            ++io.i;
-        }
-        else if(io.i >= data.simData.length && io.j < data.resultData.length){
+
+        if(io.j < data.resultData.length){
             updateTasksRanAtEachTickLog(io.j)
             ++io.j;
         }
+
     }        
         
-    setDeceleratingTimeout(syncReporter, 30, data.simData.length + data.resultData.length + 1)
+    setDeceleratingTimeout(syncReporter, 200, data.simData.length + data.resultData.length + 1)
     throughputRef.current.innerHTML = `${data.throughput.toFixed(3)} tasks per millisecond`
 
   }, [dimensions,data])
