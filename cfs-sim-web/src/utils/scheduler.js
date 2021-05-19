@@ -31,6 +31,7 @@ function roundTo(n, digits) {
     return +(test.toFixed(digits));
 }
 
+ //data collection
 function saveTimeline(val, id, message, op, isVal, isId, isM, start_ms) {
     const newSimTree = {
         val, id, message, op, isVal, isId, isM
@@ -82,31 +83,27 @@ function updateSummationWeights(value) {
 // runScheduler: Run scheduler algorithm
 function runScheduler(tasks, timeline) {
 
-    //var simTree = new rbt.RBT()
     var start_ms = new Date().getTime();
     binaryTree.RESET_STATS();
 
-    saveTimeline(-1, "-", "Scheduler Begins the Operations", "s", 0, 0, 1, start_ms)
-    //var resultData = []
+    saveTimeline(-1, "-", "Scheduler Begins the Operations", "s", 0, 0, 1, start_ms)    
+    
     // queue of tasks sorted in arrival_time order
     var time_queue = tasks.task_queue;
     time_queue.sort(function (a, b) {
         return a.arrival_time - b.arrival_time;
     });
     updateWeights(time_queue)
+
     // index into time_queue of the next nearest task to start
     var time_queue_idx = 0;
 
-    // min_vruntime is set to the smallest vruntime of tasks on the
-    // timeline
+    // min_vruntime is set to the smallest vruntime of tasks on the timeline
     var min_vruntime = 0;
 
-    // current running task or null if no tasks are running.
-    // Initialize statistics gathering
-
     var tasksCompleted = 0
-
-    // Loop from time/tick 0 through the total time/ticks specified
+    
+    // current running task or null if no tasks are running.
     var running_task = null;
 
     // Min time process can run before preemption
@@ -122,9 +119,10 @@ function runScheduler(tasks, timeline) {
         if(tasksCompleted === time_queue.length) break;
         var curTask = null
         if (running_task != null) curTask = running_task
+        
         // Periodic debug output
         if (curTime % 500 === 0) {
-            //console.error("curTime: " + curTime + ", size: " + timeline.size() + ", task index: " + time_queue_idx);
+            //console.error("error at: " + time_queue_idx);
         }
 
         // Results data for this time unit/tick
@@ -151,7 +149,7 @@ function runScheduler(tasks, timeline) {
             updateSummationWeights(new_task.weight)
             const message = "Inserting " + new_task.id + " with Virtual Runtime " + new_task.vruntime + " units"
             saveTimeline(new_task.vruntime, new_task.id, message, 'i', 1, 1, 1, start_ms)
-            //results.timelineData.push({...timeline})----------------timelineData
+            
         }
 
         tresults.sliceData = updateSlices(time_queue, Math.max(latency, min_granularity * (time_queue.length - tasksCompleted)), curTime)
@@ -181,7 +179,7 @@ function runScheduler(tasks, timeline) {
             var min_node = timeline.min();
             curTask = min_node.val;
             curTask.this_slice = 0;
-            //simTree.remove(simTree.min());
+            
             var message = "Removing " + curTask.id + " with Virtual Runtime " + roundTo(curTask.vruntime, 3) + " units"
             console.log(message)
             console.log(curTask)
@@ -190,7 +188,7 @@ function runScheduler(tasks, timeline) {
                 min_vruntime = timeline.min().val.vruntime
                 message += ", Updating Minimum Virtual Runtime to " + roundTo(min_vruntime, 3) + " units"
             }
-            //results.timelineData.push({...timeline})----------------timelineData
+            
             saveTimeline(-1, curTask.id, message, "r", 0, 1, 1, start_ms)
         }
 
@@ -240,15 +238,13 @@ function runScheduler(tasks, timeline) {
     response.elapsed_ms = (new Date().getTime()) - start_ms
     response.throughput = response.elapsed_ms / tasks.num_of_tasks
 
-    //binaryTree.RESET_STATS();
-
     saveTimeline(-1, "-", "Scheduler Operations are Over", "n", 0, 0, 1, start_ms)
 
     return response
 }
 
 
-//-------------------------------------------------------//
+//------------------------------------------------------------------------------------------//
 
 function generateSummary(tasks, timeline, results) {
     var out = "", tnodes = [], hvals = [];
@@ -321,45 +317,10 @@ function generateReport(tasks, timeline, results, mode) {
         }
     }
 
-    // Sum all the reads and writes
-    // for (var r in results.node_stats.read) {
-    //     reads += results.node_stats.read[r];
-    // }
-    // for (var r in results.node_stats.write) {
-    //     writes += results.node_stats.write[r];
-    // }
-    // total = reads + writes;
-
-    // if (mode === 'csv') {
-    //     // Report summary statistics
-    //     // header is printed by caller
-    //     out += tasks.num_of_tasks + ",";
-    //     out += tasks.total_time + ",";
-    //     out += completed + ",";
-
-    //     out += results.elapsed_ms + ",";
-    //     out += reads + ",";
-    //     out += writes + ",";
-    //     out += total + ",";
-    //     out += (completed / results.elapsed_ms) + ",";
-    //     out += (completed / total);
-    // } else {
-    //     // Report summary statistics
-    //     out += "Total Tasks: " + tasks.num_of_tasks + "\n";
-    //     out += "Total Time: " + tasks.total_time + "\n";
-    //     out += "Completed Tasks: " + completed + "\n";
-
-    //     out += "Wallclock elapsed time: " + results.elapsed_ms + "ms\n";
-    //     out += "Node operations reads  : " + reads + "\n";
-    //     out += "                writes : " + writes + "\n";
-    //     out += "                total  : " + total + "\n";
-    //     out += "Throughput: " + (completed / results.elapsed_ms) + " completed tasks/ms\n";
-    //     out += "            " + (completed / total) + " completed tasks/operation\n";
-    //     //console.log("Tasks per tick:", tasks_per_tick);
-    // }
 
     return out;
 }
+//------------------------------------------------------------------------------------------//
 
 function getTimeline() {
     function vsort(a, b) {
