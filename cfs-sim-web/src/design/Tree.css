@@ -1,8 +1,16 @@
 .simMain{
+    min-height: 100vh;
+    min-width: 80vw;
+    height : fit-content;
+    width : 80vw;
+    background-color:honeydew;
+}
+
+.simTree{
     border: 3px solid black;
     min-height: 100vh;
     min-width: 80vw;
-    height : 100vh;
+    height : fit-content;
     width : 80vw;
     background-color:honeydew;
 }
@@ -11,7 +19,7 @@
     width : 100%;
     height : 100%;
     padding : 50px;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .taskData{

@@ -35,7 +35,7 @@ const DynamicTree = ({dimensions,data}) => {
         height : dimensions.height - margin.top - margin.bottom
     }
     
-    var duration = 750
+    var duration = 800
 
   const svgRef = useRef()
   const messageRef = useRef()
@@ -184,14 +184,14 @@ const DynamicTree = ({dimensions,data}) => {
         // })
         .transition()
         .duration(duration)
-        .delay(linkObj => linkObj.source.depth * 500)
+        .delay(linkObj => linkObj.source.depth * duration/2)
         .attr("stroke-dashoffset", 0)
         .style("fill","none")
         .attr("d", diagonal)
     
       link.exit()
           .transition()
-          .duration(duration)
+          .duration(duration/2)
           .attr("d", function(d) {
             var o = {x: d.source.x, y: d.source.y}
             return diagonal({source: o, target: o})
@@ -330,13 +330,15 @@ const DynamicTree = ({dimensions,data}) => {
     }        
         
     setDeceleratingTimeout(syncReporter, 30, data.simData.length + data.resultData.length + 1)
-    throughputRef.current.innerHTML = `${data.throughput} tasks per millisecond`
+    throughputRef.current.innerHTML = `${data.throughput.toFixed(3)} tasks per millisecond`
 
   }, [dimensions,data])
 
   return (
     <div className="simMain">
+        <div className="simTree">
         <svg className="svg" ref= {svgRef}></svg>
+        </div>
         <div className="taskData">
         <div  className="dataWithTree">
         <label>Current Task:</label>   

@@ -107,7 +107,7 @@ const Input = ({copyValuesToRoot}) => {
         <input type="number" className="InputNumber" ref={inputNumber1}  disabled = {DisabledNInput}></input>
         </p>
         <p className="labelInputBinder">
-        <label>Enter Total Time</label>
+        <label>Enter Total Allowed Time</label>
         <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
         </p>
         <p>{message !== '' ? (message) : null}</p>
@@ -117,7 +117,7 @@ const Input = ({copyValuesToRoot}) => {
         </div>
         <div className="InputValues"> 
             <h3>Values:</h3>
-            <div>{NInput ? (<><p><b className="highlight">Number of Processes</b> = <b className="highlight">{NInput.n}</b></p><p><b className="highlight">Time Quantum</b> = <b className="highlight">{NInput.tq}</b></p></>) : null }</div> 
+            <div>{NInput ? (<><p><b className="highlight">Number of Processes</b> = <b className="highlight">{NInput.n}</b></p><p><b className="highlight">Total Allowed Time</b> = <b className="highlight">{NInput.tq}</b></p></>) : null }</div> 
             <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>Process ID</th> <th>Arrival Time</th> <th>Burst Time</th> <th>Priority</th> </tr> {displayInputValues()}</table>) : (<p>Enter the input values</p>)}</div> 
         </div>
         </>

@@ -16,7 +16,7 @@ const App = () => {
     const [PostToServerData, setPostToServerData] = useState(null)
 
     
-    // const [DisabledSimulate, setDisabledSimulate] = useState(true)
+    //const [DisabledSimulate, setDisabledSimulate] = useState(true)
     const [DisabledSimulate, setDisabledSimulate] = useState(false)
     
 
@@ -64,7 +64,7 @@ const App = () => {
                 ]
             }
             setPostToServerData({...dummyData})
-            // setPostToServerData({...InputData})
+            //setPostToServerData({...InputData})
             
             setDisabledSimulate(true)
         }
