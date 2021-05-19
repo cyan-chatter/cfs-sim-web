@@ -16,8 +16,8 @@ const App = () => {
     const [PostToServerData, setPostToServerData] = useState(null)
 
     
-    //const [DisabledSimulate, setDisabledSimulate] = useState(true)
-    const [DisabledSimulate, setDisabledSimulate] = useState(false)
+    const [DisabledSimulate, setDisabledSimulate] = useState(true)
+    //const [DisabledSimulate, setDisabledSimulate] = useState(false)
     
 
     const treeRef = useRef(null)
@@ -32,39 +32,27 @@ const App = () => {
         console.log('clicked to fetch')
         if (!DisabledSimulate) {
 
-            
-            const dummyData = {
-                num_of_tasks: 4,
-                total_time: 100,
-                task_queue: [
-                    {
-                        id: 'A',
-                        arrival_time: 12,
-                        burst_time: 22,
-                        priority: 1
-                    },
-                    {
-                        id: 'B',
-                        arrival_time: 5,
-                        burst_time: 9,
-                        priority: 2
-                    },
-                    {
-                        id: 'C',
-                        arrival_time: 7,
-                        burst_time: 20,
-                        priority: 3
-                    },
-                    {
-                        id: 'D',
-                        arrival_time: 2,
-                        burst_time: 6,
-                        priority: 4
-                    }
-                ]
-            }
-            setPostToServerData({...dummyData})
-            //setPostToServerData({...InputData})
+            // const dummyData = {
+            //     num_of_tasks: 2,
+            //     total_time: 200,
+            //     task_queue: [
+            //         {
+            //             id: 'A',
+            //             arrival_time: 12,
+            //             burst_time: 20,
+            //             priority: 1
+            //         },
+            //         {
+            //             id: 'B',
+            //             arrival_time: 20,
+            //             burst_time: 35,
+            //             priority: 2
+            //         }
+            //     ]
+            // }
+
+            //setPostToServerData({...dummyData})
+            setPostToServerData({...InputData})
             
             setDisabledSimulate(true)
         }
@@ -72,8 +60,8 @@ const App = () => {
 
     const copyValuesToRoot = (ph, pd) => {
         const iData = {
-            num_of_tasks: ph.n,
-            total_time: ph.tq,
+            num_of_tasks: parseInt(ph.n),
+            total_time: parseInt(ph.tq),
             task_queue: pd
         }
         setInputData(iData)

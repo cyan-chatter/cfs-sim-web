@@ -16,7 +16,6 @@ const Input = ({copyValuesToRoot}) => {
     const [InputValues, setInputValues] = useState([])
 
     const inputNumber1 = useRef(0)
-    const inputNumber2 = useRef(0)
 
     useEffect(() => {
         
@@ -29,8 +28,8 @@ const Input = ({copyValuesToRoot}) => {
     }, [IInput])
 
     const onFixNumber = () => {
-        if(inputNumber1.current.value > 0 && inputNumber2.current.value > 0){
-            setNInput({n : inputNumber1.current.value, tq : inputNumber2.current.value})
+        if(inputNumber1.current.value > 0){
+            setNInput({n : inputNumber1.current.value, tq : 200})
             setIInput(+(inputNumber1.current.value))
             setMessage('')
             setDisabledNInput(true)
@@ -52,16 +51,16 @@ const Input = ({copyValuesToRoot}) => {
             }
             setCurInputs({
                 ...CurInputs,
-                arrival_time : e.target.value
+                arrival_time : parseInt(e.target.value)
             })
         }
         else if(e.target.name === "I3"){
-            if(e.target.value < 0){
-                e.target.value = 0
+            if(e.target.value < 1){
+                e.target.value = 1
             }
             setCurInputs({
                 ...CurInputs,
-                burst_time : e.target.value
+                burst_time : parseInt(e.target.value)
             })
         }
         else if(e.target.name === "I4"){
@@ -70,7 +69,7 @@ const Input = ({copyValuesToRoot}) => {
             }
             setCurInputs({
                 ...CurInputs,
-                priority : e.target.value
+                priority : parseInt(e.target.value)
             })
         }
     }
@@ -106,10 +105,6 @@ const Input = ({copyValuesToRoot}) => {
         <label>Enter Number of Processes</label>
         <input type="number" className="InputNumber" ref={inputNumber1}  disabled = {DisabledNInput}></input>
         </p>
-        <p className="labelInputBinder">
-        <label>Enter Total Allowed Time</label>
-        <input type="number" className="InputNumber" ref={inputNumber2}  disabled = {DisabledNInput}></input>
-        </p>
         <p>{message !== '' ? (message) : null}</p>
         <button className="TempButton" id="Enter" onClick={onFixNumber} disabled = {DisabledNInput}> Enter </button>
         </div>    
@@ -117,7 +112,7 @@ const Input = ({copyValuesToRoot}) => {
         </div>
         <div className="InputValues"> 
             <h3>Values:</h3>
-            <div>{NInput ? (<><p><b className="highlight">Number of Processes</b> = <b className="highlight">{NInput.n}</b></p><p><b className="highlight">Total Allowed Time</b> = <b className="highlight">{NInput.tq}</b></p></>) : null }</div> 
+            <div>{NInput ? (<><p><b className="highlight">Number of Processes</b> = <b className="highlight">{NInput.n}</b></p></>) : null }</div> 
             <div>{InputValues ? (<table className="InputValuesTable"> <tr> <th>Process ID</th> <th>Arrival Time</th> <th>Burst Time</th> <th>Priority</th> </tr> {displayInputValues()}</table>) : (<p>Enter the input values</p>)}</div> 
         </div>
         </>
