@@ -1,6 +1,4 @@
-# CFS Simulator
-
-### cfs-sim.vercel.app/
+# [CFS Simulator](cfs-sim.vercel.app/)
 ### A web-based simulator for the Completely Fair Scheduling algorithm used in the Linux Kernels
 
 ## Objective
