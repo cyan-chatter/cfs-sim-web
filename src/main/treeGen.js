@@ -1,9 +1,6 @@
 var rbt = require('../utils/rbt')
 
 export const genTree = (simTree, tgd, notifier, syncTime) => {
-    // const newSimTree = {
-    //     val, id, message, op, isVal, isId, isM
-    // }
 
     if(tgd.op === "s"){
         simTree = new rbt.RBT()

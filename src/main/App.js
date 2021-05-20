@@ -4,8 +4,6 @@ import DynamicTree from './DynamicTree'
 import Input from './Input'
 import {useScheduler} from './useScheduler'
 
-//import {useWindowSize} from './useWindowSize'
-
 
 var dimensions = {width: null, height: null}
 dimensions.width = 800
@@ -22,8 +20,6 @@ const App = () => {
     //const [DisabledSimulate, setDisabledSimulate] = useState(false)
     
     const treeRef = useRef(null)
-
-    //var dimensions = useWindowSize()
 
     const Data = useScheduler(PostToServerData)
 
