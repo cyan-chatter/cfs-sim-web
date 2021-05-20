@@ -1,21 +1,19 @@
-var binaryTree = require('../utils/bint'),
-        bst = require('../utils/bst'),
-        rbt = require('../utils/rbt')
+var rbt = require('../utils/rbt')
 
 export const genTree = (simTree, tgd, notifier, syncTime) => {
     // const newSimTree = {
     //     val, id, message, op, isVal, isId, isM
     // }
 
-    if(tgd.op == "s"){
+    if(tgd.op === "s"){
         simTree = new rbt.RBT()
     }
 
-    else if(tgd.op == "i"){
+    else if(tgd.op === "i"){
         simTree.insert('n', tgd.val, tgd.id)
     }
 
-    else if(tgd.op == "r"){
+    else if(tgd.op === "r"){
         if(simTree !== null && simTree.min() !== null){
             simTree.remove(simTree.min())
         }

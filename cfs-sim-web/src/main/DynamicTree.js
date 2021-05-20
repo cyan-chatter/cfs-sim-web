@@ -1,28 +1,8 @@
-import React, {useRef, useEffect, useState} from 'react'
+import React, {useRef, useEffect} from 'react'
 import '../design/App.css'
 import '../design/Tree.css'
 import {genTree} from './treeGen'
 const d3 = require('d3')
-
-// { 
-    //     num_of_tasks : 3,
-    //     total_time : 11,
-    //     task_queue : [
-    //         {id : 'A',
-    //         arrival_time : 1,
-    //         burst_time : 3,
-    //         priority : 2},
-    //         {id : 'B',
-    //         arrival_time : 2,
-    //         burst_time : 4,
-    //         priority : 1},
-    //         {id : 'C',
-    //         arrival_time : 2,
-    //         burst_time : 3,
-    //         priority : 3}
-    //     ]
-    // 
-// }
 
 const DynamicTree = ({dimensions,data}) => {
 
@@ -56,23 +36,19 @@ const DynamicTree = ({dimensions,data}) => {
       }
     }
 
-    function vsort(a,b) {
-      return a.val.vruntime - b.val.vruntime;
-    }
-
-    var nilIdx = 0
+    var ni = 0
     var tree = d3.layout.tree()  
       .size([curDim.width ,curDim.height])
       .children(function(n) {
         var c = [];
         if (n.val !== 'NIL') {
             if (n.left.val === 'NIL') {
-                c.push({id: "NIL" + (nilIdx++), p: {}, val:'NIL'});
+                c.push({id: "NIL" + (ni++), p: {}, val:'NIL'});
             } else {
                 c.push(n.left);
             }
             if (n.right.val === 'NIL') {
-                c.push({id: "NIL" + (nilIdx++), p: {}, val:'NIL'});
+                c.push({id: "NIL" + (ni++), p: {}, val:'NIL'});
             } else {
                 c.push(n.right);
             }
@@ -98,9 +74,9 @@ const DynamicTree = ({dimensions,data}) => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     
-    function update(sourceTree) {
+    function update(treeData) {
       
-      var root = sourceTree.root() 
+      var root = treeData.root() 
       if (root === Response.NIL) {  
           root = {p: {}, val: 'NIL'}
       }
@@ -123,12 +99,11 @@ const DynamicTree = ({dimensions,data}) => {
           .style("stroke", function(n) { return d3.rgb(nodeColor(n)).darker() })
     
       nodeEnter.append("text")
-          //.attr("x", function(d) { return d.children ? -10 : 10; })
           .attr("dy", "0.35em")
           .attr("text-anchor", function(d) { return d.children ? "middle" : "start" })
           .text(function(d) { if (d.val !== 'NIL') { return `${d.name}` }})
           .style("fill-opacity", 0.1)  
-          //.text(function(d) { if (d.val !== 'NIL') { return `${d.val.toFixed(2)}` }})
+          //to do: also append `${d.val.toFixed(2)}`
           
       var nodeUpdate = node.transition()
           .duration(duration)
@@ -164,8 +139,6 @@ const DynamicTree = ({dimensions,data}) => {
     
       link.enter().insert("path", "g")
           .attr("class", "link")
-          //.style("stroke", "black")
-          //.style("stroke-width", 2)
           .attr("d", function(d) {
             var o = {x: d.source.x, y: d.source.y}
             return diagonal({source: o, target: o});
@@ -197,8 +170,7 @@ const DynamicTree = ({dimensions,data}) => {
             return diagonal({source: o, target: o})
           })
           .remove()
-    
-      // Stashing the old positions of nodes for creating transition
+
       nodes.forEach(function(d) {
         d.x0 = d.x
         d.y0 = d.y

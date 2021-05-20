@@ -1,9 +1,11 @@
 import '../design/App.css'
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import DynamicTree from './DynamicTree'
 import Input from './Input'
-import {useWindowSize} from './useWindowSize'
 import {useScheduler} from './useScheduler'
+
+//import {useWindowSize} from './useWindowSize'
+
 
 var dimensions = {width: null, height: null}
 dimensions.width = 800
@@ -19,17 +21,13 @@ const App = () => {
     const [DisabledSimulate, setDisabledSimulate] = useState(true)
     //const [DisabledSimulate, setDisabledSimulate] = useState(false)
     
-
     const treeRef = useRef(null)
 
     //var dimensions = useWindowSize()
-    //console.log(dimensions)
-
 
     const Data = useScheduler(PostToServerData)
 
     const onClickToFetchHandler = () => {
-        console.log('clicked to fetch')
         if (!DisabledSimulate) {
 
             // const dummyData = {
@@ -66,10 +64,9 @@ const App = () => {
         }
         setInputData(iData)
         setDisabledSimulate(false)
-        console.log(iData)
     }
 
-    console.log('app runs Data is ', Data)
+    //console.log('app runs Data is ', Data)
 
     var tree = null
     if (Data) {

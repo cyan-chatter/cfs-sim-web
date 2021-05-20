@@ -8,10 +8,7 @@ const Input = ({copyValuesToRoot}) => {
     const [NInput, setNInput] = useState(null)
     const [IInput, setIInput] = useState(null)
     const [message, setMessage] = useState('')
-
     const [DisabledNInput, setDisabledNInput] = useState(false)
-    const [DisabledSubmit, setDisabledSubmit] = useState(true)
-
     const [CurInputs,setCurInputs] = useState({id : null, arrival_time: null, burst_time: null, priority: null}) 
     const [InputValues, setInputValues] = useState([])
 
@@ -20,9 +17,7 @@ const Input = ({copyValuesToRoot}) => {
     useEffect(() => {
         
         if(IInput === 0){ 
-            console.log('IInput got to 0')
             copyValuesToRoot(NInput,InputValues)
-            //setDisabledNInput(false)
         }
         
     }, [IInput])
